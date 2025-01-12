@@ -14,8 +14,8 @@ export default function MainCard({ AL30Data }: { AL30Data: AL30Data }) {
     const balanceARS    = new Intl.NumberFormat("de-DE", { style: "currency", currency: "ARS", currencyDisplay: 'code' }).format(useAppSelector(selectBalanceARS))
     const balanceUSD    = new Intl.NumberFormat("de-DE", { style: "currency", currency: "USD", currencyDisplay: 'code' }).format(useAppSelector(selectBalanceUSD))
 
-    if ( mode === 'buy' ) return <BuyCard AL30Data={AL30Data}/>
-    // if ( mode === 'sell' ) return <SellCard mepData={mepData}/>
+    if ( mode === 'buy' ) return <BuyCard AL30Data={AL30Data} />
+    if ( mode === 'sell' ) return <SellCard AL30Data={AL30Data} />
 
     return(
         <Fade in appear>
