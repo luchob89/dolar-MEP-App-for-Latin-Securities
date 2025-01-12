@@ -13,7 +13,7 @@ export default async function Home() {
 
   const data    = await fetch('https://data912.com/live/mep')
   const mepData = await data.json()
-  const AL30    = mepData.filter( bonus => bonus.ticker === 'AL30' )
+  const AL30    = mepData.filter( (bonus: { ticker: string; }) => bonus.ticker === 'AL30' )
   const AL30Data: AL30Data = {
     ticker: AL30[0].ticker,
     ars_bid: AL30[0].ars_bid,

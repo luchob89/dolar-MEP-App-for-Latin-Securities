@@ -1,4 +1,3 @@
-import type { Action } from '@reduxjs/toolkit'
 import { configureStore } from '@reduxjs/toolkit'
 import userDataReducer from '@/features/userDataSlice'
 

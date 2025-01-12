@@ -7,7 +7,7 @@ import { changeBalanceARS, changeBalanceUSD, changeMode, selectBalanceARS, selec
 import { AL30Data } from '../page';
 import { useState } from 'react';
 
-const BuyCalculationResult = ({ amount, status, AL30Data, balanceARS, balanceUSD, dispatch }: { amount: number, status: 'pending' | 'ready', AL30Data: AL30Data, balanceARS: number, balanceUSD: number, dispatch: Function }) => {
+const BuyCalculationResult = ({ amount, status, AL30Data, balanceARS, balanceUSD, dispatch }: { amount: number, status: 'pending' | 'ready', AL30Data: AL30Data, balanceARS: number, balanceUSD: number, dispatch: (...args: unknown[]) => unknown }) => {
 
     // Monto a comprar formateado
     const formattedAmount = new Intl.NumberFormat("de-DE", { style: "currency", currency: "USD", currencyDisplay: 'code' }).format(amount)
