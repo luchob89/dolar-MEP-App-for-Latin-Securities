@@ -39,7 +39,7 @@ const SellCalculationResult = ({ amount, status, AL30Data, balanceARS, balanceUS
                     <div><strong>Monto a comprar:</strong> {formattedAmount}</div>
                     <div><strong>Cotización de venta:</strong> {new Intl.NumberFormat("de-DE", { style: "currency", currency: "USD", currencyDisplay: 'code' }).format(AL30Price)}</div>
                     <div><strong>Bono:</strong> {AL30Data.ticker}D</div>
-                    <div><strong>Cant. de títulos:</strong> {nominals}</div>
+                    <div><strong>Cant. de títulos:</strong> {new Intl.NumberFormat("de-DE").format(nominals)}</div>
                     <div><strong>Costo de la transacción:</strong> <strong className={USD_cost > balanceUSD ? 'text-danger' : 'text-success'}>{new Intl.NumberFormat("de-DE", { style: "currency", currency: "USD", currencyDisplay: 'code' }).format(USD_cost)}</strong></div>
                     <div><strong>Compra ARS final:</strong> <strong className={USD_cost > balanceUSD ? 'text-danger' : 'text-success'}>{new Intl.NumberFormat("de-DE", { style: "currency", currency: "ARS" }).format(ARSToGet)}</strong></div>
                     <small className="text-muted"><strong>Tip: </strong>Puede seguir editando el monto para encontrar nuevos resultados.</small>
@@ -90,7 +90,7 @@ export default function SellCard({ AL30Data }: { AL30Data: AL30Data }) {
                         <h6>Saldo USD: <strong>{new Intl.NumberFormat("de-DE", { style: "currency", currency: "USD", currencyDisplay: 'code' }).format(balanceUSD)}</strong></h6>
                     </div>
 
-                    <Form onSubmit={e => e.preventDefault()}>
+                    <Form onSubmit={e => { e.preventDefault(); submitHandler() }}>
                         <Form.Group className="mb-3" controlId="formAmount">
                             <Form.Label><strong>Monto a vender</strong></Form.Label>
                             <Form.Control type="number" placeholder="Seleccione monto en USD" onChange={sellAmountHandler} />
