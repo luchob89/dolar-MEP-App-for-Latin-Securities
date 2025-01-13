@@ -49,7 +49,7 @@ const SellCalculationResult = ({ amount, status, AL30Data, balanceARS, balanceUS
             <Fade in appear>
                 <Card className='text-center mb-3'>
                     <Card.Body>
-                        <div><strong>Monto a comprar:</strong> {formattedAmount}</div>
+                        <div><strong>Monto a vender:</strong> {formattedAmount}</div>
                         <div><strong>Cotización de venta:</strong> {formatUSD(AL30Price)}</div>
                         <div><strong>Bono:</strong> {AL30Data.ticker}D</div>
                         <div><strong>Cant. de títulos:</strong> {new Intl.NumberFormat("de-DE").format(nominals)}</div>
@@ -148,7 +148,7 @@ export default function SellCard({ AL30Data }: { AL30Data: AL30Data }) {
                         <Form.Group className="mb-3" controlId="formAmount">
                             <Form.Label><strong>Monto a vender</strong></Form.Label>
                             <Form.Control type="number" placeholder="Seleccione monto en USD" onChange={sellAmountHandler} />
-                            <Button className='mt-2' variant='outline-secondary' size='sm' onClick={allHandler}>Comprar todo mi disponible</Button>
+                            <Button className='mt-2' variant='outline-secondary' size='sm' onClick={allHandler}>Vender todo mi disponible</Button>
                         </Form.Group>
                     </Form>
 

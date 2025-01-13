@@ -10,7 +10,7 @@ import { AL30Data } from '../page';
 import { useState } from 'react';
 import { formatARS, formatUSD } from './mainCard'
 
-const BuyCalculationResult = ({ amount, status, AL30Data, balanceARS, balanceUSD, dispatch }: { amount: number, status: 'pending' | 'ready', AL30Data: AL30Data, balanceARS: number, balanceUSD: number, dispatch: (...args: unknown[]) => unknown }) => {
+const BuyCalculationResult = ({ amount, status, AL30Data, balanceARS, balanceUSD, dispatch, ars_ask, AL30Price }: { amount: number, status: 'pending' | 'ready', AL30Data: AL30Data, balanceARS: number, balanceUSD: number, dispatch: (...args: unknown[]) => unknown, ars_ask: number, AL30Price: number }) => {
 
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
     const [showSuccessModal, setShowSuccessModal]           = useState(false);
@@ -21,11 +21,7 @@ const BuyCalculationResult = ({ amount, status, AL30Data, balanceARS, balanceUSD
 
     // Monto a comprar formateado
     const formattedAmount = formatUSD(amount)
-    // Los costos llegan de la API en centavos
-    const ars_ask = AL30Data.ars_ask / 100;
-    const usd_bid = AL30Data.usd_bid / 100;
-    // Precio del bono en USD
-    const AL30Price = ars_ask / usd_bid;
+  
     // Redondeamos los títulos a número entero
     const nominals = Math.floor(amount * AL30Price / ars_ask);
     // Costo en ARS
@@ -107,6 +103,12 @@ export default function BuyCard({ AL30Data }: { AL30Data: AL30Data }) {
     const balanceARS = useAppSelector(selectBalanceARS)
     const balanceUSD = useAppSelector(selectBalanceUSD)
 
+    // Los costos llegan de la API en centavos
+    const ars_ask = AL30Data.ars_ask / 100;
+    const usd_bid = AL30Data.usd_bid / 100;
+    // Precio del bono en USD
+    const AL30Price = ars_ask / usd_bid;
+
     const [buyAmount, setBuyAmount] = useState(0);
     const [status, setStatus]       = useState<'pending' | 'ready'>('pending');
     const [error, setError]         = useState<string | null>(null);
@@ -118,11 +120,6 @@ export default function BuyCard({ AL30Data }: { AL30Data: AL30Data }) {
 
     const allHandler = () => {
         setError(null)
-
-        const ars_ask = AL30Data.ars_ask / 100;
-        const usd_bid = AL30Data.usd_bid / 100;
-        // Precio del bono en USD
-        const AL30Price = ars_ask / usd_bid;
         setBuyAmount(balanceARS / AL30Price)
         setStatus('ready')
     }
@@ -168,7 +165,16 @@ export default function BuyCard({ AL30Data }: { AL30Data: AL30Data }) {
                         </Button>
                     </div>
 
-                    <BuyCalculationResult amount={buyAmount} status={status} AL30Data={AL30Data} balanceARS={balanceARS} balanceUSD={balanceUSD} dispatch={dispatch} />
+                    <BuyCalculationResult
+                        amount={buyAmount}
+                        status={status}
+                        AL30Data={AL30Data}
+                        balanceARS={balanceARS}
+                        balanceUSD={balanceUSD}
+                        dispatch={dispatch}
+                        ars_ask={ars_ask}
+                        AL30Price={AL30Price}
+                    />
 
                 </Card.Body>
             </Card>
