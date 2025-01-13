@@ -49,7 +49,7 @@ const BuyCalculationResult = ({ amount, status, AL30Data, balanceARS, balanceUSD
                         <div><strong>Cotización de compra:</strong> {formatUSD(AL30Price)}</div>
                         <div><strong>Bono:</strong> {AL30Data.ticker}</div>
                         <div><strong>Cant. de títulos:</strong> {new Intl.NumberFormat("de-DE").format(nominals)}</div>
-                        <div><strong>Costo de la transacción:</strong> <strong className={ARS_cost > balanceARS ? 'text-danger' : 'text-success'}>{formatARS(ARS_cost)}</strong></div>
+                        <div><strong>Monto a acreditar en ARS:</strong> <strong className={ARS_cost > balanceARS ? 'text-danger' : 'text-success'}>{formatARS(ARS_cost)}</strong></div>
                         <div><strong>Compra USD final:</strong> <strong className={ARS_cost > balanceARS ? 'text-danger' : 'text-success'}>{formatUSD(finalUSDBuy)}</strong></div>
                         <small className="text-muted"><strong>Tip: </strong>Puede seguir editando el monto para encontrar nuevos resultados.</small>
 

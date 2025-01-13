@@ -53,7 +53,7 @@ const SellCalculationResult = ({ amount, status, AL30Data, balanceARS, balanceUS
                         <div><strong>Cotización de venta:</strong> {formatUSD(AL30Price)}</div>
                         <div><strong>Bono:</strong> {AL30Data.ticker}D</div>
                         <div><strong>Cant. de títulos:</strong> {new Intl.NumberFormat("de-DE").format(nominals)}</div>
-                        <div><strong>Costo de la transacción:</strong> <strong className={USD_cost > balanceUSD ? 'text-danger' : 'text-success'}>{formatUSD(USD_cost)}</strong></div>
+                        <div><strong>Monto a debitar en USD:</strong> <strong className={USD_cost > balanceUSD ? 'text-danger' : 'text-success'}>{formatUSD(USD_cost)}</strong></div>
                         <div><strong>Compra ARS final:</strong> <strong className={USD_cost > balanceUSD ? 'text-danger' : 'text-success'}>{formatARS(ARSToGet)}</strong></div>
                         <small className="text-muted"><strong>Tip: </strong>Puede seguir editando el monto para encontrar nuevos resultados.</small>
 
