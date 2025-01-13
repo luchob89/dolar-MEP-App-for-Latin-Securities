@@ -57,10 +57,10 @@ const BuyCalculationResult = ({ amount, status, AL30Data, balanceARS, balanceUSD
                         <div><strong>Compra USD final:</strong> <strong className={ARS_cost > balanceARS ? 'text-danger' : 'text-success'}>{formatUSD(finalUSDBuy)}</strong></div>
                         <small className="text-muted"><strong>Tip: </strong>Puede seguir editando el monto para encontrar nuevos resultados.</small>
 
-                        {ARS_cost > balanceARS && <Fade in appear><Alert className='mt-2' variant={'danger'}>Saldo insuficiente. Por favor, elija un monto menor.</Alert></Fade>}
+                        {ARS_cost > balanceARS || nominals === 0 && <Fade in appear><Alert className='mt-2' variant={'danger'}>Saldo insuficiente. Por favor, elija un monto menor.</Alert></Fade>}
 
                         <div className='mt-2'>
-                            <Button variant={'success'} disabled={ARS_cost > balanceARS} onClick={openConfirmationModal}>Comprar</Button>
+                            <Button variant={'success'} disabled={ARS_cost > balanceARS || nominals === 0} onClick={openConfirmationModal}>Comprar</Button>
                         </div>
                     </Card.Body>
                 </Card>
@@ -118,8 +118,13 @@ export default function BuyCard({ AL30Data }: { AL30Data: AL30Data }) {
 
     const allHandler = () => {
         setError(null)
-        //setBuyAmount(85)
-        //setStatus('ready')
+
+        const ars_ask = AL30Data.ars_ask / 100;
+        const usd_bid = AL30Data.usd_bid / 100;
+        // Precio del bono en USD
+        const AL30Price = ars_ask / usd_bid;
+        setBuyAmount(balanceARS / AL30Price)
+        setStatus('ready')
     }
 
     const submitHandler = () => {

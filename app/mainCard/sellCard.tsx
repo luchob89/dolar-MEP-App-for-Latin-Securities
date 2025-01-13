@@ -57,10 +57,10 @@ const SellCalculationResult = ({ amount, status, AL30Data, balanceARS, balanceUS
                         <div><strong>Compra ARS final:</strong> <strong className={USD_cost > balanceUSD ? 'text-danger' : 'text-success'}>{formatARS(ARSToGet)}</strong></div>
                         <small className="text-muted"><strong>Tip: </strong>Puede seguir editando el monto para encontrar nuevos resultados.</small>
 
-                        {USD_cost > balanceUSD && <Fade in appear><Alert className='mt-2' variant={'danger'}>Saldo insuficiente. Por favor, elija un monto menor.</Alert></Fade>}
+                        {USD_cost > balanceUSD || nominals === 0 && <Fade in appear><Alert className='mt-2' variant={'danger'}>Saldo insuficiente. Por favor, elija un monto menor.</Alert></Fade>}
 
                         <div className='mt-2'>
-                            <Button variant={'danger'} disabled={USD_cost > balanceUSD} onClick={openConfirmationModal}>Vender</Button>
+                            <Button variant={'danger'} disabled={USD_cost > balanceUSD || nominals === 0} onClick={openConfirmationModal}>Vender</Button>
                         </div>
                     </Card.Body>
                 </Card>
@@ -118,8 +118,8 @@ export default function SellCard({ AL30Data }: { AL30Data: AL30Data }) {
 
     const allHandler = () => {
         setError(null)
-        //setSellAmount(85)
-        //setStatus('ready')
+        setSellAmount(balanceUSD)
+        setStatus('ready')
     }
 
     const submitHandler = () => {
