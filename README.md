@@ -10,7 +10,7 @@ Utilicé Redux, por un lado, para gestionar los estados de orden superior de la 
 
 ## Link para visita directa (deploy productivo en servidor de Vercel)
 
-	https://dolar-mep-app-for-latin-securities.vercel.app/
+https://dolar-mep-app-for-latin-securities.vercel.app/
 
 ## Funcionalidades
 
