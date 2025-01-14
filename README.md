@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Aplicación de compra/venta DE Dólar MEP para Latin Securities
 
-## Getting Started
+## Descripción General
 
-First, run the development server:
+Esta aplicación de compra/venta de Dólar MEP es una simulación de una herramienta financiera diseñada para facilitar la compra y venta de USD utilizando ARS a través del bono AL30. La aplicación permite a los usuarios calcular los costos de transacción, ejecutar operaciones de compra/venta, gestionar sus saldos y ver su historial de transacciones.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Funcionalidades
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Comprar USD**: Calcular y ejecutar la compra de USD utilizando ARS.
+- **Vender USD**: Calcular y ejecutar la venta de USD para obtener ARS.
+- **Historial de Transacciones**: Ver un historial de todas las transacciones de compra y venta.
+- **Gestión de Saldos**: Rastrear y actualizar los saldos en ARS y USD.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Componentes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### `App`
 
-## Learn More
+El punto de entrada principal de la aplicación. Configura el proveedor de Redux y renderiza los componentes `ChooseAmounts`, `MainCard`, `BuyCard` y `Sellcard`.
 
-To learn more about Next.js, take a look at the following resources:
+### `ChooseAmounts`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Permite a los usuarios ingresar montos de saldos iniciales en ARS y USD, para realizar una simulación precisa de valores cercanos a la realidad del cliente, o continuar utilizando los saldos predeterminados de la aplicación, si es que el cliente decide probar la funcionalidad de la misma sin detenerse a llenar los campos iniciales. Estos últimos incluyen validación de entrada y manejo de errores para saldos menores o iguales a 0. Además, si se han realizado una o más transacciones, esta pantalla incluye un botón de borrado del Historial de Transacciones.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### `MainCard`
 
-## Deploy on Vercel
+El componente principal que proporciona la interfaz para comprar y vender USD. Muestra saldos iniciales en ARS y en USD y los botones para elegir la acción acompañados de la cotización de compra/venta actual. Cuando se han realizado una o más transacciones, este componente incluye la tabla del Historial de Transacciones debajo del componente principal.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### `BuyCard`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Proporciona la interfaz para ingresar el monto de ARS a utilizar para comprar USD. Incluye validación de entrada con manejo de errores para saldos menores o iguales a 0 y botón de "Comprar todo mi disponible" para hacer el cálculo automático de cuántos títulos se alcanzan a comprar con el saldo actual en ARS.
+
+### `SellCard`
+
+Proporciona la interfaz para ingresar el monto de USD a vender para obtener ARS. Incluye validación de entrada con manejo de errores para saldos menores o iguales a 0 y botón de "Vender todo mi disponible" para hacer el cálculo automático de cuántos títulos se alcanzan a vender con el saldo actual en USD.
+
+### `BuyCalculationResult`
+
+Maneja el cálculo y la visualización de los resultados para las transacciones de compra. Muestra el monto a comprar, la cotización actual de compra, el nombre del bono, la cant. de títulos a comprar, el monto a acreditar en ARS y el monto de la compra final en USD. También gestiona los modales de confirmación y éxito para las operaciones de compra.
+
+### `SellCalculationResult`
+
+Maneja el cálculo y la visualización de los resultados para las transacciones de venta. Muestra el monto a vender, la cotización actual de venta, el nombre del bono, la cant. de títulos a vender, el monto a debitar en USD y el monto de la compra final en ARS. También gestiona los modales de confirmación y éxito para las operaciones de venta.
+
+### `TxsHistoryTable`
+
+Muestra una tabla con todas las transacciones pasadas, incluyendo detalles diferentes para dispositivos desktop y mobile. Para el primer caso se muestran la fecha, el tipo de transacción, el saldo previo (en ARS para compras, en USD para ventas), el monto comprado/vendido, el saldo posterior (en ARS para compras, en USD para ventas) y la cotización utilizada para la transacción. Para dispositivos móviles se acotaron los datos a la fecha, el monto comprado/vendido y la cotización utilizada. Esta tabla puede borrarse en la pantalla previa de `ChooseAmounts` por si quieren "resetearse" los registros anteriores a una nueva selección de montos.
+
+## Gestión de Estado
+
+La aplicación utiliza Redux para la gestión del estado. El slice principal del estado es `userDataSlice`, que incluye acciones para cambiar saldos, cambiar modos (que a su vez cambia la pantalla que se renderiza al cliente) y agregar registros de transacciones.
+
+## Pruebas
+
+La aplicación incluye pruebas unitarias para todos los componentes principales utilizando Jest y React Testing Library. Las pruebas cubren la renderización, cambios en las entradas, manejo de errores y despacho de acciones.
+
+## Instalación
+
+Para instalar y ejecutar la aplicación localmente, sigue estos pasos:
+
+1. Clona el repositorio:
+    
+	git clone https://github.com/luchob89/dolar-MEP-App-for-Latin-Securities
+	
+2. Navega al directorio del proyecto:
+    
+	cd dolar-MEP-App-for-Latin-Securities
+	
+3. Instala las dependencias:
+    
+	npm install
+	
+4. Inicia el servidor de desarrollo:
+    
+	npm run dev
+	
+5. O construye e inicia una versión productiva:
+    
+	npm start
+	
+## Uso
+
+1. Abre la aplicación en tu navegador.
+2. Ingresa el monto de ARS que deseas usar para comprar USD o el monto de USD que deseas vender para obtener ARS.
+3. Haz clic en el botón "Comprar" para comprar USD o en el botón "Vender" para vender USD.
+4. Confirma la transacción en el modal que aparece.
+5. Visualiza los saldos actualizados y el historial de transacciones.
+
