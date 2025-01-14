@@ -2,6 +2,7 @@
 import Fade from 'react-bootstrap/Fade';
 import Alert from 'react-bootstrap/Alert';
 import Modal from 'react-bootstrap/Modal';
+import Spinner from 'react-bootstrap/Spinner';
 import { changeBalanceARS, changeBalanceUSD, changeMode, addTxRegistry } from '@/features/userDataSlice';
 import { AL30Data } from '../page';
 import { useState } from 'react';
@@ -11,6 +12,7 @@ export const SellCalculationResult = ({ amount, status, AL30Data, balanceARS, ba
 
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [isLoading, setLoading] = useState(false);
 
     const closeConfirmationModal = () => setShowConfirmationModal(false);
     const openConfirmationModal = () => setShowConfirmationModal(true);
@@ -47,11 +49,20 @@ export const SellCalculationResult = ({ amount, status, AL30Data, balanceARS, ba
     // Compra final de USD
     const ARSToGet = nominals * ars_bid;
 
+    function simulateNetworkRequest() {
+        return new Promise(resolve => {
+            setTimeout(resolve, 2000);
+        });
+    }
+
     const sellMEP = () => {
-        // Ocultamos el modal de confirmación
-        closeConfirmationModal();
-        // Mostramos el modal de éxito de la operación
-        openSuccessModal();
+        setLoading(true)
+        simulateNetworkRequest().then(() => {
+            // Ocultamos el modal de confirmación
+            closeConfirmationModal();
+            // Mostramos el modal de éxito de la operación
+            openSuccessModal();
+        });
     };
 
     // Condición para mostrar mensaje de error y deshabilitar botón de acción
@@ -79,7 +90,7 @@ export const SellCalculationResult = ({ amount, status, AL30Data, balanceARS, ba
             </Fade>
 
             <Modal show={showConfirmationModal} onHide={closeConfirmationModal} centered>
-                <Modal.Header closeButton>
+                <Modal.Header closeButton className='noBorderBottom'>
                     <Modal.Title>Confirmar venta de USD</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -91,21 +102,21 @@ export const SellCalculationResult = ({ amount, status, AL30Data, balanceARS, ba
                         <div className='text-decoration-line-through'>{formatUSD(balanceUSD)}</div>&nbsp; → &nbsp;<strong className='text-danger'>{formatUSD(balanceUSD - USD_cost)}</strong>
                     </div>
                 </Modal.Body>
-                <Modal.Footer className='justify-content-center'>
-                    <Button variant="danger" onClick={sellMEP}>Aceptar</Button>
-                    <Button variant="secondary" onClick={closeConfirmationModal}>Cancelar</Button>
+                <Modal.Footer className='justify-content-center noBorderTop'>
+                    <Button variant="danger" disabled={isLoading} onClick={sellMEP}>{isLoading ? <Spinner animation="border" size="sm" variant="light" /> : 'Aceptar'}</Button>
+                    <Button variant="secondary" disabled={isLoading} onClick={closeConfirmationModal}>Cancelar</Button>
                 </Modal.Footer>
             </Modal>
 
             <Modal show={showSuccessModal} onHide={closeSuccessModal} centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>Exito!</Modal.Title>
+                <Modal.Header closeButton className='noBorderBottom'>
+                    <Modal.Title className='text-success fw-bolder'>Éxito!</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <h5 className='text-center'>La operación fue realizada correctamente.</h5>
+                    <h5 className='text-center text-success'>La operación fue realizada correctamente.</h5>
                 </Modal.Body>
-                <Modal.Footer className='justify-content-center'>
-                    <Button variant="primary" onClick={closeSuccessModal}>Aceptar</Button>
+                <Modal.Footer className='justify-content-center noBorderTop'>
+                    <Button variant="success" onClick={closeSuccessModal}>Aceptar</Button>
                 </Modal.Footer>
             </Modal>
         </>
