@@ -64,20 +64,28 @@ Para instalar y ejecutar la aplicación localmente, sigue estos pasos:
 	```
 	
 2. Navega al directorio del proyecto:
-    
+
+    ```
 	cd dolar-MEP-App-for-Latin-Securities
+	```
 	
 3. Instala las dependencias:
     
+	```
 	npm install
+	```
 	
 4. Inicia el servidor de desarrollo:
     
+	```
 	npm run dev
+	```
 	
 5. O construye e inicia una versión productiva:
     
+	```
 	npm start
+	```
 	
 ## Uso
 
