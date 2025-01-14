@@ -59,7 +59,9 @@ Para instalar y ejecutar la aplicación localmente, sigue estos pasos:
 
 1. Clona el repositorio:
     
+	```
 	git clone https://github.com/luchob89/dolar-MEP-App-for-Latin-Securities
+	```
 	
 2. Navega al directorio del proyecto:
     
