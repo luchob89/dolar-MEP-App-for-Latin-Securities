@@ -40,3 +40,50 @@ a {
     color-scheme: dark;
   }
 }
+
+h1, h2, h3, h4, h5, h6 {
+    color: rgba(0,0,57,1)!important;
+}
+
+.color-blue {
+   color: rgba(0,0,57,1);
+}
+
+input {
+    background-color: #fafafa !important;
+}
+
+button {
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    transition: all .3s ease!important;
+}
+
+div {
+    font-weight: 400!important;
+}
+
+.card-body {
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.separator {
+    height: 1rem;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.mainCard-btns {
+    display: flex!important;
+    flex-direction: column!important;
+    align-items: center!important;
+}
+
+.mainCard-small-text {
+    margin-top: .2rem;
+    font-size: .8rem;
+}
+
+.tx-data-container {
+    display: flex;
+    flex-direction: column;
+    gap: .2em;
+}

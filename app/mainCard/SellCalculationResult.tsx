@@ -61,23 +61,22 @@ export const SellCalculationResult = ({ amount, status, AL30Data, balanceARS, ba
     if (status === 'ready' && amount !== 0) return (
         <>
             <Fade in appear>
-                <Card className='text-center mb-3'>
-                    <Card.Body>
-                        <div><strong>Monto a vender:</strong> {formattedAmount}</div>
-                        <div><strong>Cotización de venta:</strong> {formatUSD(AL30Price)}</div>
-                        <div><strong>Bono:</strong> {AL30Data.ticker}D</div>
-                        <div><strong>Cant. de títulos:</strong> {new Intl.NumberFormat("de-DE").format(nominals)}</div>
-                        <div><strong>Monto a debitar en USD:</strong> <strong className={showError ? 'text-danger' : 'text-success'}>{formatUSD(USD_cost)}</strong></div>
-                        <div><strong>Compra ARS final:</strong> <strong className={showError ? 'text-danger' : 'text-success'}>{formatARS(ARSToGet)}</strong></div>
-                        <small className="text-muted"><strong>Tip: </strong>Puede seguir editando el monto para encontrar nuevos resultados.</small>
+                <div className='mt-4 tx-data-container'>
+                    <div><strong>Monto a vender:</strong> {formattedAmount}</div>
+                    <div><strong>Cotización de venta:</strong> {formatUSD(AL30Price)}</div>
+                    <div><strong>Bono:</strong> {AL30Data.ticker}D</div>
+                    <div><strong>Cant. de títulos:</strong> {new Intl.NumberFormat("de-DE").format(nominals)}</div>
+                    <div><strong>Monto a debitar en USD:</strong> <strong className={showError ? 'text-danger' : 'text-success'}>{formatUSD(USD_cost)}</strong></div>
+                    <div className='mb-3'><strong>Compra ARS final:</strong> <strong className={showError ? 'text-danger' : 'text-success'}>{formatARS(ARSToGet)}</strong></div>
+                    
+                    {showError && <Alert className='mt-2' variant={'danger'}>Saldo insuficiente. Por favor, elija un monto menor.</Alert>}
 
-                        {showError && <Fade in appear><Alert className='mt-2' variant={'danger'}>Saldo insuficiente. Por favor, elija un monto menor.</Alert></Fade>}
+                    <small className="text-muted"><strong>Tip: </strong>Puede seguir editando el monto para encontrar nuevos resultados.</small>
 
-                        <div className='mt-2'>
-                            <Button variant={'danger'} disabled={showError} onClick={openConfirmationModal}>Vender</Button>
-                        </div>
-                    </Card.Body>
-                </Card>
+                    <div className='mt-2'>
+                        <Button className='w-100' variant={'danger'} disabled={showError} onClick={openConfirmationModal}>Vender</Button>
+                    </div>
+                </div>
             </Fade>
 
             <Modal show={showConfirmationModal} onHide={closeConfirmationModal} centered>
@@ -87,10 +86,10 @@ export const SellCalculationResult = ({ amount, status, AL30Data, balanceARS, ba
                 <Modal.Body>
                     <h5 className='text-center'>¿Desea continuar?</h5>
                     <div className='d-flex justify-content-center align-items-center'>
-                        <div className='text-decoration-line-through'>{formatARS(balanceARS)}</div>&nbsp; <h4>→</h4> &nbsp;<strong className='text-success'>{formatARS(balanceARS + ARSToGet)}</strong>
+                        <div className='text-decoration-line-through'>{formatARS(balanceARS)}</div>&nbsp; → &nbsp;<strong className='text-success'>{formatARS(balanceARS + ARSToGet)}</strong>
                     </div>
                     <div className='d-flex justify-content-center align-items-center'>
-                        <div className='text-decoration-line-through'>{formatUSD(balanceUSD)}</div>&nbsp; <h4>→</h4> &nbsp;<strong className='text-danger'>{formatUSD(balanceUSD - USD_cost)}</strong>
+                        <div className='text-decoration-line-through'>{formatUSD(balanceUSD)}</div>&nbsp; → &nbsp;<strong className='text-danger'>{formatUSD(balanceUSD - USD_cost)}</strong>
                     </div>
                 </Modal.Body>
                 <Modal.Footer className='justify-content-center'>

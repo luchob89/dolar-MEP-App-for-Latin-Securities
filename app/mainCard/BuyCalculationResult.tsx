@@ -56,23 +56,22 @@ export const BuyCalculationResult = ({ amount, status, AL30Data, balanceARS, bal
     if (status === 'ready' && amount !== 0) return (
         <>
             <Fade in appear>
-                <Card className='text-center mb-3'>
-                    <Card.Body>
-                        <div><strong>Monto a comprar:</strong> {formattedAmount}</div>
-                        <div><strong>Cotización de compra:</strong> {formatUSD(AL30Price)}</div>
-                        <div><strong>Bono:</strong> {AL30Data.ticker}</div>
-                        <div><strong>Cant. de títulos:</strong> {new Intl.NumberFormat("de-DE").format(nominals)}</div>
-                        <div><strong>Monto a acreditar en ARS:</strong> <strong className={showError ? 'text-danger' : 'text-success'}>{formatARS(ARS_cost)}</strong></div>
-                        <div><strong>Compra USD final:</strong> <strong className={showError ? 'text-danger' : 'text-success'}>{formatUSD(finalUSDBuy)}</strong></div>
-                        <small className="text-muted"><strong>Tip: </strong>Puede seguir editando el monto para encontrar nuevos resultados.</small>
+                <div className='mt-4 tx-data-container'>
+                    <div><strong>Monto a comprar:</strong> {formattedAmount}</div>
+                    <div><strong>Cotización de compra:</strong> {formatUSD(AL30Price)}</div>
+                    <div><strong>Bono:</strong> {AL30Data.ticker}</div>
+                    <div><strong>Cant. de títulos:</strong> {new Intl.NumberFormat("de-DE").format(nominals)}</div>
+                    <div><strong>Monto a acreditar en ARS:</strong> <strong className={showError ? 'text-danger' : 'text-success'}>{formatARS(ARS_cost)}</strong></div>
+                    <div className='mb-3'><strong>Compra USD final:</strong> <strong className={showError ? 'text-danger' : 'text-success'}>{formatUSD(finalUSDBuy)}</strong></div>
 
-                        {showError && <Alert className='mt-2' variant={'danger'}>Saldo insuficiente. Por favor, elija un monto menor.</Alert>}
+                    {showError && <Alert className='mt-2' variant={'danger'}>Saldo insuficiente. Por favor, elija un monto menor.</Alert>}
 
-                        <div className='mt-2'>
-                            <Button variant={'success'} disabled={showError} onClick={openConfirmationModal}>Comprar</Button>
-                        </div>
-                    </Card.Body>
-                </Card>
+                    <small className="text-muted"><strong>Tip: </strong>Puede seguir editando el monto para encontrar nuevos resultados.</small>
+
+                    <div className='mt-2'>
+                        <Button className='w-100' variant={'success'} disabled={showError} onClick={openConfirmationModal}>Comprar</Button>
+                    </div>
+                </div>
             </Fade>
 
             <Modal show={showConfirmationModal} onHide={closeConfirmationModal} centered>
@@ -82,10 +81,10 @@ export const BuyCalculationResult = ({ amount, status, AL30Data, balanceARS, bal
                 <Modal.Body>
                     <h5 className='text-center'>¿Desea continuar?</h5>
                     <div className='d-flex justify-content-center align-items-center'>
-                        <div className='text-decoration-line-through'>{formatARS(balanceARS)}</div>&nbsp; <h4>→</h4> &nbsp;<strong className='text-danger'>{formatARS(balanceARS - ARS_cost)}</strong>
+                        <div className='text-decoration-line-through'>{formatARS(balanceARS)}</div>&nbsp; → &nbsp;<strong className='text-danger'>{formatARS(balanceARS - ARS_cost)}</strong>
                     </div>
                     <div className='d-flex justify-content-center align-items-center'>
-                        <div className='text-decoration-line-through'>{formatUSD(balanceUSD)}</div>&nbsp; <h4>→</h4> &nbsp;<strong className='text-success'>{formatUSD(balanceUSD + finalUSDBuy)}</strong>
+                        <div className='text-decoration-line-through'>{formatUSD(balanceUSD)}</div>&nbsp; → &nbsp;<strong className='text-success'>{formatUSD(balanceUSD + finalUSDBuy)}</strong>
                     </div>
                 </Modal.Body>
                 <Modal.Footer className='justify-content-center'>

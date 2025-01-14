@@ -43,7 +43,28 @@ export default function BuyCard({ AL30Data }: { AL30Data: AL30Data }) {
         setStatus('ready')
     }
 
-    return(
+    return (
+        <>
+        <style type="text/css">
+        {`
+            .btn-custom1 {
+              background-color: #000039;
+              color: white;
+            }
+            .btn-custom1:hover {
+              background-color: #000029;
+              color: white;
+            }
+            .btn-custom2 {
+              background-color: rgb(51, 151, 244);
+              color: white;
+            }
+            .btn-custom2:hover {
+              background-color: rgb(51, 121, 800);
+              color: white;
+            }
+        `}
+        </style>
         <Fade in appear>
             <Card className='text-center'>
                 <Card.Body>
@@ -59,19 +80,19 @@ export default function BuyCard({ AL30Data }: { AL30Data: AL30Data }) {
 
                     <Form onSubmit={e => { e.preventDefault(); submitHandler() }}>
                         <Form.Group className="mb-3" controlId="formAmount">
-                            <Form.Label><strong>Monto a comprar</strong></Form.Label>
-                            <Form.Control type="number" placeholder="Seleccione monto en USD" onChange={buyAmountHandler} />
-                            <Button className='mt-2' variant='outline-secondary' size='sm' onClick={allHandler}>Comprar todo mi disponible</Button>
+                            <Form.Label><strong className='color-blue'>Monto a comprar</strong></Form.Label>
+                            <Form.Control type="number" className='text-center' placeholder="Seleccione monto en USD" onChange={buyAmountHandler} />
+                            <Button className='w-100 mt-3 mb-2' variant='custom1' size='sm' onClick={allHandler}>Comprar todo mi disponible</Button>
                         </Form.Group>
                     </Form>
 
                     { error && <div className='text-danger mb-3'>{error}</div> }
 
                     <div className="d-flex gap-2 mb-2 justify-content-center">
-                        <Button variant="primary" onClick={submitHandler}>
+                        <Button variant="custom2" className='w-100' onClick={submitHandler}>
                             Calcular
                         </Button>
-                        <Button variant="light" onClick={() => { dispatch(changeMode('')) }}>
+                        <Button variant="light" className='w-100' onClick={() => { dispatch(changeMode('')) }}>
                             Volver
                         </Button>
                     </div>
@@ -90,5 +111,6 @@ export default function BuyCard({ AL30Data }: { AL30Data: AL30Data }) {
                 </Card.Body>
             </Card>
         </Fade>
+        </>
     )
 }
