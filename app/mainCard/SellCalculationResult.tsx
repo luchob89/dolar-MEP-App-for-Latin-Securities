@@ -1,5 +1,4 @@
-﻿import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
+﻿import Button from 'react-bootstrap/Button';
 import Fade from 'react-bootstrap/Fade';
 import Alert from 'react-bootstrap/Alert';
 import Modal from 'react-bootstrap/Modal';
