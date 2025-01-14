@@ -46,7 +46,7 @@ export const BuyCalculationResult = ({ amount, status, AL30Data, balanceARS, bal
 
     function simulateNetworkRequest() {
         return new Promise(resolve => {
-            setTimeout(resolve, 2000);
+            setTimeout(resolve, 1000);
         });
     }
 
@@ -99,7 +99,7 @@ export const BuyCalculationResult = ({ amount, status, AL30Data, balanceARS, bal
                 </Modal.Body>
                 <Modal.Footer className='justify-content-center noBorderTop'>
                     <Button variant="success" disabled={isLoading} onClick={buyMEP}>{isLoading ? <Spinner animation="border" size="sm" variant="light" /> : 'Aceptar'}</Button>
-                    <Button variant="secondary" disabled={isLoading} onClick={closeConfirmationModal}>Cancelar</Button>
+                    {!isLoading && <Button variant="secondary" disabled={isLoading} onClick={closeConfirmationModal}>Cancelar</Button>}
                 </Modal.Footer>
             </Modal>
 
