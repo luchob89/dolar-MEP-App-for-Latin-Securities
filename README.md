@@ -10,7 +10,7 @@ Utilicé Redux, por un lado, para gestionar los estados de orden superior de la 
 
 ## Link para visita directa (deploy productivo en servidor de Vercel)
 
-https://dolar-mep-app-for-latin-securities.vercel.app/
+	https://dolar-mep-app-for-latin-securities.vercel.app/
 
 ## Funcionalidades
 
@@ -63,33 +63,33 @@ La aplicación incluye pruebas unitarias para todos los componentes principales 
 
 ## Instalación
 
-Para instalar y ejecutar la aplicación localmente, sigue estos pasos:
+Para instalar y ejecutar la aplicación localmente, siga estos pasos:
 
-1. Clona el repositorio:
+1. Clone el repositorio:
     
 	```
 	git clone https://github.com/luchob89/dolar-MEP-App-for-Latin-Securities
 	```
 	
-2. Navega al directorio del proyecto:
+2. Navegue al directorio del proyecto:
 
     ```
 	cd dolar-MEP-App-for-Latin-Securities
 	```
 	
-3. Instala las dependencias:
+3. Instale las dependencias:
     
 	```
 	npm install
 	```
 	
-4. Inicia el servidor de desarrollo:
+4. Inicie el servidor de desarrollo:
     
 	```
 	npm run dev
 	```
 	
-5. O construye e inicia una versión productiva:
+5. O construya e inicie una versión productiva:
     
 	```
 	npm start
@@ -97,9 +97,9 @@ Para instalar y ejecutar la aplicación localmente, sigue estos pasos:
 	
 ## Uso
 
-1. Abre la aplicación en tu navegador.
-2. Ingresa el monto de ARS que deseas usar para comprar USD o el monto de USD que deseas vender para obtener ARS.
-3. Haz clic en el botón "Comprar" para comprar USD o en el botón "Vender" para vender USD.
-4. Confirma la transacción en el modal que aparece.
-5. Visualiza los saldos actualizados y el historial de transacciones.
+1. Abra la aplicación en su navegador.
+2. Ingrese un saldo en ARS, que usará para comprar USD, y un saldo en USD, que usará para obtener ARS. También puede continuar con los saldos predeterminados por la aplicación.
+3. Haga clic en el botón "Comprar USD" para comprar USD o en el botón "Vender USD" para vender USD.
+4. Confirme la transacción en el modal que aparece.
+5. Visualize los saldos actualizados y el historial de transacciones.
 
