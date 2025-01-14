@@ -21,6 +21,10 @@ export const BuyCalculationResult = ({ amount, status, AL30Data, balanceARS, bal
         // Obtenemos la fecha actual
         const date = new Date();
         const options: Intl.DateTimeFormatOptions = {
+            day: '2-digit',
+            month: '2-digit',
+            year: '2-digit',
+            hour12: false,
             hour: 'numeric',
             minute: 'numeric',
             second: 'numeric'

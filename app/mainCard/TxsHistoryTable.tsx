@@ -22,7 +22,7 @@ export const TxsHistoryTable = ({ txs }: { txs: txRegistry[]; }) => {
     }, []);
 
     if (txs.length > 0) return (
-        <div className='txsHistoryContainer mt-4'>
+        <div className='txsHistoryContainer mt-4 w-100'>
             <h4 className='text-center mt-1 mb-0'>Historial de Transacciones</h4>
             <div className='text-center text-muted mb-2 mt-0'><small>Ordenadas por más recientes</small></div>
             <table className="table-responsive w-100">
