@@ -83,13 +83,7 @@ Para instalar y ejecutar la aplicación localmente, siga estos pasos:
 	npm install
 	```
 	
-4. Inicie el servidor de desarrollo:
-    
-	```
-	npm run dev
-	```
-	
-5. O construya e inicie una versión productiva:
+4. Construya e inicie una versión productiva:
     
 	```
 	npm start
