@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Fade from 'react-bootstrap/Fade';
 import Alert from 'react-bootstrap/Alert';
-import { changeBalanceARS, changeBalanceUSD, changeMode, selectBalanceARS, selectBalanceUSD, selectTxsHistory, resetTxsHistory } from "@/features/userDataSlice";
+import { changeBalanceARS, changeBalanceUSD, changeMode, selectBalanceARS, selectBalanceUSD, selectTxsHistory, resetTxsHistory } from "../../features/userDataSlice";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { useState } from "react";
 import { formatARS, formatUSD } from './mainCard';

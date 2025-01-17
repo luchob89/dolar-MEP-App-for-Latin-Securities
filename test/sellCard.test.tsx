@@ -1,11 +1,11 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
 import SellCard from '../app/mainCard/sellCard';
 import { AL30Data } from '../app/page';
 import { Provider } from 'react-redux';
 import { store } from '../app/store';
 import { describe, it, expect, jest } from '@jest/globals';
+import '@testing-library/jest-dom';
 
 describe('SellCard Component', () => {
     const mockAL30Data: AL30Data = {
@@ -30,7 +30,7 @@ describe('SellCard Component', () => {
             </Provider>
         );
 
-        expect(screen.getByText('Vender USD')).toBeInTheDocument();
+        expect(screen.getByText('Venta de Dólar MEP')).toBeInTheDocument();
     });
 
     it('should update amount on input change', () => {
@@ -40,26 +40,41 @@ describe('SellCard Component', () => {
             </Provider>
         );
 
-        const input = screen.getByPlaceholderText('Ingrese monto en USD');
+        const input = screen.getByPlaceholderText('Seleccione monto en USD');
         fireEvent.change(input, { target: { value: '50' } });
 
         expect(input).toHaveValue(50);
     });
 
-    it('should show error message if amount exceeds balance', () => {
+    it('should show error message if input is empty', () => {
         render(
             <Provider store={store}>
                 <SellCard {...defaultProps} />
             </Provider>
         );
 
-        const input = screen.getByPlaceholderText('Ingrese monto en USD');
-        fireEvent.change(input, { target: { value: '200' } });
+        const input = screen.getByPlaceholderText('Seleccione monto en USD');
+        fireEvent.change(input, { target: { value: '' } });
+        fireEvent.click(screen.getByText('Calcular'))
 
-        expect(screen.getByText('Saldo insuficiente.')).toBeInTheDocument();
+        expect(screen.getByText('Por favor, seleccione un monto válido.')).toBeInTheDocument();
     });
 
-    it('should dispatch sell action on button click', () => {
+    it('should show error message if amount is negative', () => {
+        render(
+            <Provider store={store}>
+                <SellCard {...defaultProps} />
+            </Provider>
+        );
+
+        const input = screen.getByPlaceholderText('Seleccione monto en USD');
+        fireEvent.change(input, { target: { value: '-200' } });
+        fireEvent.click(screen.getByText('Calcular'))
+
+        expect(screen.getByText('Por favor, seleccione un monto mayor a 0.')).toBeInTheDocument();
+    });
+
+    it('should show more data and Sell button on Calculate button click', () => {
         const dispatchMock = jest.fn();
         const props = { ...defaultProps, dispatch: dispatchMock };
         render(
@@ -68,11 +83,26 @@ describe('SellCard Component', () => {
             </Provider>
         );
 
-        const input = screen.getByPlaceholderText('Ingrese monto en USD');
+        const input = screen.getByPlaceholderText('Seleccione monto en USD');
         fireEvent.change(input, { target: { value: '50' } });
+        fireEvent.click(screen.getByText('Calcular'));
 
-        fireEvent.click(screen.getByText('Vender'));
+        expect(screen.getByText('Vender')).toBeInTheDocument();
+    });
 
-        expect(dispatchMock).toHaveBeenCalled();
+    it('should show more data, total amount in ARS to be deducted and Buy button on "Buy All available amount" button click ', () => {
+    
+            const props = { ...defaultProps };
+            render(
+                <Provider store={store}>
+                    <SellCard {...props} />
+                </Provider>
+            );
+    
+            fireEvent.click(screen.getByText('Vender todo mi disponible'));
+            const nominals = Math.floor(defaultProps.balanceUSD / (mockAL30Data.usd_ask/100));
+    
+            expect(screen.getByText( nominals )).toBeInTheDocument();
+            expect(screen.getByText('Vender')).toBeInTheDocument();
     });
 });

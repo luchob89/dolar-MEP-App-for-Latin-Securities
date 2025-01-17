@@ -1,11 +1,12 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
 import MainCard from '../app/mainCard/mainCard';
 import { AL30Data } from '../app/page';
 import { Provider } from 'react-redux';
 import { store } from '../app/store';
 import { describe, it, expect, jest } from '@jest/globals';
+import '@testing-library/jest-dom';
+import { changeMode } from '@/features/userDataSlice';
 
 describe('MainCard Component', () => {
     const mockAL30Data: AL30Data = {
@@ -24,6 +25,9 @@ describe('MainCard Component', () => {
     };
 
     it('should render without crashing', () => {
+
+        store.dispatch(changeMode(''))
+
         render(
             <Provider store={store}>
                 <MainCard {...defaultProps} />
@@ -34,89 +38,48 @@ describe('MainCard Component', () => {
         expect(screen.getByText('Vender USD')).toBeInTheDocument();
     });
 
-    it('should update buy amount on input change', () => {
-        render(
-            <Provider store={store}>
-                <MainCard {...defaultProps} />
-            </Provider>
-        );
+    it('should dispatch changeMode action and show buy menu on buy button click', () => {
+        const props = { ...defaultProps };
 
-        const input = screen.getByPlaceholderText('Ingrese monto en ARS');
-        fireEvent.change(input, { target: { value: '500' } });
+        store.dispatch(changeMode(''))
 
-        expect(input).toHaveValue(500);
-    });
-
-    it('should update sell amount on input change', () => {
-        render(
-            <Provider store={store}>
-                <MainCard {...defaultProps} />
-            </Provider>
-        );
-
-        const input = screen.getByPlaceholderText('Ingrese monto en USD');
-        fireEvent.change(input, { target: { value: '50' } });
-
-        expect(input).toHaveValue(50);
-    });
-
-    it('should show error message if buy amount exceeds balance', () => {
-        render(
-            <Provider store={store}>
-                <MainCard {...defaultProps} />
-            </Provider>
-        );
-
-        const input = screen.getByPlaceholderText('Ingrese monto en ARS');
-        fireEvent.change(input, { target: { value: '20000' } });
-
-        expect(screen.getByText('Saldo insuficiente.')).toBeInTheDocument();
-    });
-
-    it('should show error message if sell amount exceeds balance', () => {
-        render(
-            <Provider store={store}>
-                <MainCard {...defaultProps} />
-            </Provider>
-        );
-
-        const input = screen.getByPlaceholderText('Ingrese monto en USD');
-        fireEvent.change(input, { target: { value: '200' } });
-
-        expect(screen.getByText('Saldo insuficiente.')).toBeInTheDocument();
-    });
-
-    it('should dispatch buy action on buy button click', () => {
-        const dispatchMock = jest.fn();
-        const props = { ...defaultProps, dispatch: dispatchMock };
         render(
             <Provider store={store}>
                 <MainCard {...props} />
             </Provider>
         );
 
-        const input = screen.getByPlaceholderText('Ingrese monto en ARS');
-        fireEvent.change(input, { target: { value: '500' } });
-
-        fireEvent.click(screen.getByText('Comprar'));
-
-        expect(dispatchMock).toHaveBeenCalled();
+        fireEvent.click(screen.getByText('Comprar USD'));
+        expect(screen.getByText('Compra de Dólar MEP')).toBeInTheDocument();
     });
 
-    it('should dispatch sell action on sell button click', () => {
-        const dispatchMock = jest.fn();
-        const props = { ...defaultProps, dispatch: dispatchMock };
+    it('should dispatch changeMode action and show sell menu on sell button click', () => {
+        const props = { ...defaultProps };
+
+        store.dispatch(changeMode(''))
+
         render(
             <Provider store={store}>
                 <MainCard {...props} />
             </Provider>
         );
 
-        const input = screen.getByPlaceholderText('Ingrese monto en USD');
-        fireEvent.change(input, { target: { value: '50' } });
+        fireEvent.click(screen.getByText('Vender USD'));
+        expect(screen.getByText('Venta de Dólar MEP')).toBeInTheDocument();
+    });
 
-        fireEvent.click(screen.getByText('Vender'));
+    it('should dispatch changeMode action and show chooseAmounts component on Back button click', () => {
+        const props = { ...defaultProps };
 
-        expect(dispatchMock).toHaveBeenCalled();
+        store.dispatch(changeMode(''))
+
+        render(
+            <Provider store={store}>
+                <MainCard {...props} />
+            </Provider>
+        );
+
+        fireEvent.click(screen.getByText('Volver'));
+        expect(screen.getByText('Por favor, elija saldos iniciales:')).toBeInTheDocument();
     });
 });

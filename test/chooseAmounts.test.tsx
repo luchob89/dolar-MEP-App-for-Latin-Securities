@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
 import ChooseAmounts from '../app/mainCard/chooseAmounts';
 import { AL30Data } from '../app/page';
 import { Provider } from 'react-redux';
 import { store } from '../app/store';
 import { describe, it, expect, jest } from '@jest/globals';
+import '@testing-library/jest-dom';
 
 describe('ChooseAmounts Component', () => {
     const mockAL30Data: AL30Data = {
@@ -31,7 +30,7 @@ describe('ChooseAmounts Component', () => {
             </Provider>
         );
 
-        expect(screen.getByText('Elegir Montos')).toBeInTheDocument();
+        expect(screen.getByText('Por favor, elija saldos iniciales:')).toBeInTheDocument();
     });
 
     it('should update ARS amount on input change', () => {
@@ -41,7 +40,7 @@ describe('ChooseAmounts Component', () => {
             </Provider>
         );
 
-        const input = screen.getByPlaceholderText('Ingrese monto en ARS');
+        const input = screen.getByPlaceholderText('Seleccione monto en ARS');
         fireEvent.change(input, { target: { value: '500' } });
 
         expect(input).toHaveValue(500);
@@ -54,55 +53,72 @@ describe('ChooseAmounts Component', () => {
             </Provider>
         );
 
-        const input = screen.getByPlaceholderText('Ingrese monto en USD');
+        const input = screen.getByPlaceholderText('Seleccione monto en USD');
         fireEvent.change(input, { target: { value: '50' } });
 
         expect(input).toHaveValue(50);
     });
 
-    it('should show error message if ARS amount exceeds balance', () => {
+    it('should show error message if ARS amount input is empty', () => {
         render(
             <Provider store={store}>
                 <ChooseAmounts {...defaultProps as any} />
             </Provider>
         );
 
-        const input = screen.getByPlaceholderText('Ingrese monto en ARS');
-        fireEvent.change(input, { target: { value: '20000' } });
+        const input = screen.getByPlaceholderText('Seleccione monto en ARS');
+        fireEvent.change(input, { target: { value: '' } });
+        fireEvent.click(screen.getAllByText('Continuar')[0]);
 
-        expect(screen.getByText('Saldo insuficiente.')).toBeInTheDocument();
+        expect(screen.getByText('Por favor, seleccione un monto en ARS válido.')).toBeInTheDocument();
     });
 
-    it('should show error message if USD amount exceeds balance', () => {
+    it('should show error message if ARS amount is negative', () => {
         render(
             <Provider store={store}>
                 <ChooseAmounts {...defaultProps as any} />
             </Provider>
         );
 
-        const input = screen.getByPlaceholderText('Ingrese monto en USD');
-        fireEvent.change(input, { target: { value: '200' } });
-
-        expect(screen.getByText('Saldo insuficiente.')).toBeInTheDocument();
-    });
-
-    it('should dispatch action on button click', () => {
-        const dispatchMock = jest.fn();
-        const props = { ...defaultProps, dispatch: dispatchMock };
-        render(
-            <Provider store={store}>
-                <ChooseAmounts {...props as any} />
-            </Provider>
-        );
-
-        const inputARS = screen.getByPlaceholderText('Ingrese monto en ARS');
-        fireEvent.change(inputARS, { target: { value: '500' } });
-
-        const inputUSD = screen.getByPlaceholderText('Ingrese monto en USD');
+        const input = screen.getByPlaceholderText('Seleccione monto en ARS');
+        const inputUSD = screen.getByPlaceholderText('Seleccione monto en USD');
+        fireEvent.change(input, { target: { value: '-50' } });
         fireEvent.change(inputUSD, { target: { value: '50' } });
+        fireEvent.click(screen.getAllByText('Continuar')[0]);
 
-        fireEvent.click(screen.getByText('Confirmar'));
+        expect(screen.getByText('Por favor, seleccione montos mayores a 0.')).toBeInTheDocument();
+    });
 
-        expect(dispatchMock).toHaveBeenCalled();
+    it('should show error message if USD amount input is empty', () => {
+        render(
+            <Provider store={store}>
+                <ChooseAmounts {...defaultProps as any} />
+            </Provider>
+        );
+
+        const inputARS = screen.getByPlaceholderText('Seleccione monto en ARS');
+        fireEvent.change(inputARS, { target: { value: '50' } });
+        const input = screen.getByPlaceholderText('Seleccione monto en USD');
+        fireEvent.change(input, { target: { value: '' } });
+        fireEvent.click(screen.getAllByText('Continuar')[0]);
+
+        expect(screen.getByText('Por favor, seleccione un monto en USD válido.')).toBeInTheDocument();
+    });
+
+    it('should show error message if USD amount is negative', () => {
+        render(
+            <Provider store={store}>
+                <ChooseAmounts {...defaultProps as any} />
+            </Provider>
+        );
+
+        const inputARS = screen.getByPlaceholderText('Seleccione monto en ARS');
+        fireEvent.change(inputARS, { target: { value: '50' } });
+
+        const inputUSD = screen.getByPlaceholderText('Seleccione monto en USD');
+        fireEvent.change(inputUSD, { target: { value: '-50' } });
+        fireEvent.click(screen.getAllByText('Continuar')[0]);
+
+        expect(screen.getByText('Por favor, seleccione montos mayores a 0.')).toBeInTheDocument();
     });
 });
