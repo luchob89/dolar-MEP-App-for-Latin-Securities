@@ -59,7 +59,7 @@ La aplicación utiliza Redux para la gestión del estado. El slice principal del
 
 ## Pruebas
 
-La aplicación incluye pruebas unitarias para todos los componentes principales utilizando Jest y React Testing Library. Las pruebas cubren la renderización, cambios en las entradas, manejo de errores y despacho de acciones.
+La aplicación incluye pruebas unitarias para todos los componentes principales utilizando Jest y React Testing Library. Esta primera versión de las pruebas cubre sólo la correcta renderización, cambios en las entradas, manejo de errores y despacho de acciones básicas.
 
 ## Instalación
 
