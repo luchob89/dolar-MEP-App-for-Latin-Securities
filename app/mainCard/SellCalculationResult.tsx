@@ -8,7 +8,7 @@ import { AL30Data } from '../page';
 import { useState } from 'react';
 import { formatARS, formatUSD } from './mainCard';
 
-export const SellCalculationResult = ({ amount, status, AL30Data, balanceARS, balanceUSD, dispatch, selectedLangObject }: { amount: number; status: 'pending' | 'ready'; AL30Data: AL30Data; balanceARS: number; balanceUSD: number; dispatch: (...args: unknown[]) => unknown; selectedLangObject: any }) => {
+export const SellCalculationResult = ({ amount, status, AL30Data, balanceARS, balanceUSD, dispatch, selectedLangObject }: { amount: number; status: 'pending' | 'ready'; AL30Data: AL30Data; balanceARS: number; balanceUSD: number; dispatch: (...args: unknown[]) => unknown; selectedLangObject: { [k: string]: string } }) => {
 
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
     const [showSuccessModal, setShowSuccessModal] = useState(false);

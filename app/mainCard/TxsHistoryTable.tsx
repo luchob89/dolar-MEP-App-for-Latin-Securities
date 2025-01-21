@@ -2,7 +2,7 @@ import { txRegistry } from '@/features/userDataSlice';
 import { useState, useEffect } from 'react';
 import { formatUSD, formatARS } from './mainCard';
 
-export const TxsHistoryTable = ({ txs, selectedLangObject }: { txs: txRegistry[], selectedLangObject: any }) => {
+export const TxsHistoryTable = ({ txs, selectedLangObject }: { txs: txRegistry[], selectedLangObject: { [k: string]: string } }) => {
 
     // Hook para detectar si estamos en desktop o mobile
     const [isDesktop, setIsDesktop] = useState<boolean>(true);

@@ -8,7 +8,7 @@ import { AL30Data } from '../page';
 import { useState } from 'react';
 import { formatARS, formatUSD } from './mainCard'
 import { BuyCalculationResult } from './BuyCalculationResult';
-export default function BuyCard({ AL30Data, selectedLangObject }: { AL30Data: AL30Data, selectedLangObject: any }) {
+export default function BuyCard({ AL30Data, selectedLangObject }: { AL30Data: AL30Data, selectedLangObject: { [k: string]: string } }) {
 
     const dispatch   = useAppDispatch()
     const balanceARS = useAppSelector(selectBalanceARS)

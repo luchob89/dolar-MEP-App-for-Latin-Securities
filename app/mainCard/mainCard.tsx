@@ -29,7 +29,7 @@ export default function MainCard({ AL30Data }: { AL30Data: AL30Data }) {
         dispatch(changeMode('chooseAmounts'))
     }
 
-    let selectedLangObject: any = userDataLang === 'ES'? ES : EN;
+    let selectedLangObject: { [k: string]: string } = userDataLang === 'ES'? ES : EN;
 
     if ( mode === 'chooseAmounts' ) return <ChooseAmounts selectedLangObject={selectedLangObject} />
     if ( mode === 'buy' ) return <BuyCard AL30Data={AL30Data} selectedLangObject={selectedLangObject} />

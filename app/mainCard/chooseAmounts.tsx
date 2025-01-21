@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { useState } from "react";
 import { formatARS, formatUSD } from './mainCard';
 
-export default function ChooseAmounts({ selectedLangObject }: { selectedLangObject: any }) {
+export default function ChooseAmounts({ selectedLangObject }: { selectedLangObject: { [k: string]: string } }) {
 
     const dispatch = useAppDispatch();
     const balanceARS = useAppSelector(selectBalanceARS);
