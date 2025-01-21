@@ -2,6 +2,7 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Fade from 'react-bootstrap/Fade';
+import InputGroup from 'react-bootstrap/InputGroup';
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { changeMode, selectBalanceARS, selectBalanceUSD } from '@/features/userDataSlice';
 import { AL30Data } from '../page';
@@ -35,6 +36,7 @@ export default function SellCard({ AL30Data, selectedLangObject }: { AL30Data: A
         // Validation
         if (sellAmount === 0) return setError(selectedLangObject.monto_valido)
         if (sellAmount < 0) return setError(selectedLangObject.un_monto_positivo)
+        if (sellAmount > 100000000) return setError(selectedLangObject.monto_menor)
         setStatus('ready')
     }
 
@@ -76,12 +78,15 @@ export default function SellCard({ AL30Data, selectedLangObject }: { AL30Data: A
                     <Form onSubmit={e => { e.preventDefault(); submitHandler() }}>
                         <Form.Group className="mb-3" controlId="formAmount">
                             <Form.Label><strong className='color-blue'>{selectedLangObject.monto_vender}</strong></Form.Label>
-                            <Form.Control type="number" className='text-center' placeholder={selectedLangObject.seleccioneUSD} onChange={sellAmountHandler} />
+                            <InputGroup className="mb-3">
+                                <InputGroup.Text>US$</InputGroup.Text>
+                                <Form.Control placeholder={selectedLangObject.seleccioneUSD} type="number" max={"100000000"} aria-label={selectedLangObject.seleccioneUSD} onChange={sellAmountHandler} />
+                            </InputGroup>
                             <Button className='w-100 mt-3 mb-2' variant='custom1' size='sm' onClick={allHandler}>{selectedLangObject.vender_disponible}</Button>
                         </Form.Group>
                     </Form>
 
-                    {error && <div className='text-danger mb-3'>{error}</div>}
+                    {error && <div className='text-danger mb-3' style={{whiteSpace: 'pre-line'}}>{error}</div>}
 
                     <div className="d-flex gap-2 mb-2 justify-content-center">
                         <Button variant="custom2" className='w-100' onClick={submitHandler}>

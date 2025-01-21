@@ -55,5 +55,6 @@ export const EN = {
     postsaldo: 'Post Balance',
     cotizacion: 'Exchange Rate',
     compra: 'Buy',
-    venta: 'Sell'
+    venta: 'Sell',
+    monto_menor: 'Maximum exceeded.\n Please select amounts less than 100.000.000'
 }

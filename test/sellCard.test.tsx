@@ -76,6 +76,20 @@ describe('SellCard Component', () => {
         expect(screen.getByText('Por favor, seleccione un monto mayor a 0.')).toBeInTheDocument();
     });
 
+    it('should show error message if amount is greater than 100.000.000', () => {
+        render(
+            <Provider store={store}>
+                <SellCard {...defaultProps} />
+            </Provider>
+        );
+
+        const input = screen.getByPlaceholderText('Seleccione monto en USD');
+        fireEvent.change(input, { target: { value: '10000000000000' } });
+        fireEvent.click(screen.getByText('Calcular'))
+
+        expect(screen.getByText('Máximo excedido. Por favor, seleccione montos menores a 100.000.000.')).toBeInTheDocument();
+    });
+
     it('should show more data and Sell button on Calculate button click', () => {
         const dispatchMock = jest.fn();
         const props = { ...defaultProps, dispatch: dispatchMock };

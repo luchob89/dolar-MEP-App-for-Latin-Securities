@@ -5,6 +5,7 @@ import Fade from 'react-bootstrap/Fade';
 import Alert from 'react-bootstrap/Alert';
 import ButtonGroup  from 'react-bootstrap/ButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
+import InputGroup from 'react-bootstrap/InputGroup';
 import { changeBalanceARS, changeBalanceUSD, changeMode, selectBalanceARS, selectBalanceUSD, selectTxsHistory, resetTxsHistory, selectLang, changeLang } from "../../features/userDataSlice";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { useState } from "react";
@@ -45,6 +46,7 @@ export default function ChooseAmounts({ selectedLangObject }: { selectedLangObje
         if (!ARSAmount) return setError(selectedLangObject.ARSvalido)
         if (!USDAmount) return setError(selectedLangObject.USDvalido)
         if (ARSAmount <= 0 || USDAmount <= 0) return setError(selectedLangObject.monto_positivo)
+        if (ARSAmount > 100000000 || USDAmount > 100000000) return setError(selectedLangObject.monto_menor)
         // Set and 'redirect'
         dispatch(changeBalanceARS(ARSAmount));
         dispatch(changeBalanceUSD(USDAmount));
@@ -114,18 +116,18 @@ export default function ChooseAmounts({ selectedLangObject }: { selectedLangObje
                         {selectedLangObject.chooseAmounts}
                     </Card.Subtitle>
 
-                        <Form onSubmit={e => { e.preventDefault(); submitInputValues(); }}>
-                            <Form.Group className="mb-3">
-                            <Form.Label><strong className='color-blue'>{selectedLangObject.saldoARS}</strong></Form.Label>
-                            <Form.Control className='text-center' type="number" placeholder={selectedLangObject.seleccioneARS} onChange={ARSAmountHandler} />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label><strong className='color-blue'>{selectedLangObject.saldoUSD}</strong></Form.Label>
-                            <Form.Control className='text-center' type="number" placeholder={selectedLangObject.seleccioneUSD} onChange={USDAmountHandler} />
-                        </Form.Group>
+                    <Form onSubmit={e => { e.preventDefault(); submitInputValues(); }}>
+                        <InputGroup className="mb-3">
+                            <InputGroup.Text>$</InputGroup.Text>
+                            <Form.Control placeholder={selectedLangObject.seleccioneARS} type="number" max={"100000000"} aria-label={selectedLangObject.seleccioneARS} onChange={ARSAmountHandler} />
+                        </InputGroup>
+                        <InputGroup className="mb-3">
+                            <InputGroup.Text>US$</InputGroup.Text>
+                            <Form.Control placeholder={selectedLangObject.seleccioneUSD} type="number" max={"100000000"} aria-label={selectedLangObject.seleccioneUSD} onChange={USDAmountHandler} />
+                        </InputGroup>
                     </Form>
 
-                    {error && <div className='text-danger mb-3'>{error}</div>}
+                    {error && <div className='text-danger mb-3' style={{whiteSpace: 'pre-line'}}>{error}</div>}
 
                     <div className="d-flex gap-2 mb-2 justify-content-center">
                         <Button className='w-100' variant="custom1" onClick={submitInputValues}>

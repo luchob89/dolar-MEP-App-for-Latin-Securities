@@ -91,6 +91,22 @@ describe('ChooseAmounts Component', () => {
         expect(screen.getByText('Por favor, seleccione montos mayores a 0.')).toBeInTheDocument();
     });
 
+    it('should show error message if ARS amount is greater than 100.000.000', () => {
+        render(
+            <Provider store={store}>
+                <ChooseAmounts {...defaultProps as any} />
+            </Provider>
+        );
+
+        const input = screen.getByPlaceholderText('Seleccione monto en ARS');
+        const inputUSD = screen.getByPlaceholderText('Seleccione monto en USD');
+        fireEvent.change(input, { target: { value: '100000000000' } });
+        fireEvent.change(inputUSD, { target: { value: '50' } });
+        fireEvent.click(screen.getAllByText('Continuar')[0]);
+
+        expect(screen.getByText('Máximo excedido. Por favor, seleccione montos menores a 100.000.000.')).toBeInTheDocument();
+    });
+
     it('should show error message if USD amount input is empty', () => {
         render(
             <Provider store={store}>
@@ -122,5 +138,22 @@ describe('ChooseAmounts Component', () => {
         fireEvent.click(screen.getAllByText('Continuar')[0]);
 
         expect(screen.getByText('Por favor, seleccione montos mayores a 0.')).toBeInTheDocument();
+    });
+
+    it('should show error message if USD amount is greater than 100.000.000', () => {
+        render(
+            <Provider store={store}>
+                <ChooseAmounts {...defaultProps as any} />
+            </Provider>
+        );
+
+        const inputARS = screen.getByPlaceholderText('Seleccione monto en ARS');
+        fireEvent.change(inputARS, { target: { value: '50' } });
+
+        const inputUSD = screen.getByPlaceholderText('Seleccione monto en USD');
+        fireEvent.change(inputUSD, { target: { value: '1000000000000' } });
+        fireEvent.click(screen.getAllByText('Continuar')[0]);
+
+        expect(screen.getByText('Máximo excedido. Por favor, seleccione montos menores a 100.000.000.')).toBeInTheDocument();
     });
 });

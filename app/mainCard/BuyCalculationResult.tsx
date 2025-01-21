@@ -50,7 +50,7 @@ export const BuyCalculationResult = ({ amount, status, AL30Data, balanceARS, bal
 
     function simulateNetworkRequest() {
         return new Promise(resolve => {
-            setTimeout(resolve, 1000);
+            setTimeout(resolve, 500);
         });
     }
 

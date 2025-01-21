@@ -55,5 +55,6 @@ export const ES = {
     postsaldo: 'Post Saldo',
     cotizacion: 'Cotización',
     compra: 'Compra',
-    venta: 'Venta'
+    venta: 'Venta',
+    monto_menor: 'Máximo excedido.\n Por favor, seleccione montos menores a 100.000.000.'
 }
