@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { formatARS, formatUSD } from './mainCard'
 import { SellCalculationResult } from './SellCalculationResult';
 
-export default function SellCard({ AL30Data }: { AL30Data: AL30Data }) {
+export default function SellCard({ AL30Data, selectedLangObject }: { AL30Data: AL30Data, selectedLangObject: any }) {
 
     const dispatch   = useAppDispatch()
     const balanceARS = useAppSelector(selectBalanceARS)
@@ -33,8 +33,8 @@ export default function SellCard({ AL30Data }: { AL30Data: AL30Data }) {
     const submitHandler = () => {
         setError(null)
         // Validation
-        if (sellAmount === 0) return setError('Por favor, seleccione un monto válido.')
-        if (sellAmount < 0) return setError('Por favor, seleccione un monto mayor a 0.')
+        if (sellAmount === 0) return setError(selectedLangObject.monto_valido)
+        if (sellAmount < 0) return setError(selectedLangObject.un_monto_positivo)
         setStatus('ready')
     }
 
@@ -63,21 +63,21 @@ export default function SellCard({ AL30Data }: { AL30Data: AL30Data }) {
         <Fade in appear>
             <Card className='text-center'>
                 <Card.Body>
-                    <Card.Title className='mb3'> <h4>Venta de Dólar MEP</h4> </Card.Title>
-                    <Card.Subtitle className="mb-3 text-muted">Calculadora de venta de títulos</Card.Subtitle>
+                    <Card.Title className='mb3'> <h4>{selectedLangObject.ventaMEP}</h4> </Card.Title>
+                    <Card.Subtitle className="mb-3 text-muted">{selectedLangObject.calculadora_venta}</Card.Subtitle>
 
                     <div className='mt-3 d-flex justify-content-around align-items-center'>
-                        <h6>Saldo ARS: <strong>{formatARS(balanceARS)}</strong></h6>
+                        <h6>{selectedLangObject.saldoARS}: <strong>{formatARS(balanceARS)}</strong></h6>
                     </div>
                     <div className='mb-1 d-flex justify-content-around align-items-center'>
-                        <h6>Saldo USD: <strong>{formatUSD(balanceUSD)}</strong></h6>
+                        <h6>{selectedLangObject.saldoUSD}: <strong>{formatUSD(balanceUSD)}</strong></h6>
                     </div>
 
                     <Form onSubmit={e => { e.preventDefault(); submitHandler() }}>
                         <Form.Group className="mb-3" controlId="formAmount">
-                            <Form.Label><strong className='color-blue'>Monto a vender</strong></Form.Label>
-                            <Form.Control type="number" className='text-center' placeholder="Seleccione monto en USD" onChange={sellAmountHandler} />
-                            <Button className='w-100 mt-3 mb-2' variant='custom1' size='sm' onClick={allHandler}>Vender todo mi disponible</Button>
+                            <Form.Label><strong className='color-blue'>{selectedLangObject.monto_vender}</strong></Form.Label>
+                            <Form.Control type="number" className='text-center' placeholder={selectedLangObject.seleccioneUSD} onChange={sellAmountHandler} />
+                            <Button className='w-100 mt-3 mb-2' variant='custom1' size='sm' onClick={allHandler}>{selectedLangObject.vender_disponible}</Button>
                         </Form.Group>
                     </Form>
 
@@ -85,14 +85,22 @@ export default function SellCard({ AL30Data }: { AL30Data: AL30Data }) {
 
                     <div className="d-flex gap-2 mb-2 justify-content-center">
                         <Button variant="custom2" className='w-100' onClick={submitHandler}>
-                            Calcular
+                            {selectedLangObject.calcular}
                         </Button>
                         <Button variant="light" className='w-100' onClick={() => { dispatch(changeMode('')) }}>
-                            Volver
+                            {selectedLangObject.volver}
                         </Button>
                     </div>
 
-                    <SellCalculationResult amount={sellAmount} status={status} AL30Data={AL30Data} balanceARS={balanceARS} balanceUSD={balanceUSD} dispatch={dispatch} />
+                    <SellCalculationResult 
+                        amount={sellAmount} 
+                        status={status} 
+                        AL30Data={AL30Data} 
+                        balanceARS={balanceARS} 
+                        balanceUSD={balanceUSD} 
+                        dispatch={dispatch} 
+                        selectedLangObject={selectedLangObject}
+                    />
 
                 </Card.Body>
             </Card>

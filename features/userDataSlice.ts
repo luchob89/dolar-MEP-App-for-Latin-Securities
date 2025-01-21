@@ -16,7 +16,8 @@ export interface userData {
   balanceARS: number,
   balanceUSD: number,
   mode: string,
-  txsHistory: txRegistry[]
+  txsHistory: txRegistry[],
+  lang: string
 }
 
 // Initial value for the slice state
@@ -24,7 +25,8 @@ const initialState: userData = {
     balanceARS: 100000,
     balanceUSD: 100,
     mode: 'chooseAmounts',
-    txsHistory: []
+    txsHistory: [],
+    lang: 'ES'
 }
 
 export const userDataSlice = createSlice({
@@ -45,12 +47,15 @@ export const userDataSlice = createSlice({
         },
         resetTxsHistory: state => {
             state.txsHistory = []
+        },
+        changeLang: (state, action: PayloadAction<string>) => {
+            state.lang = action.payload
         }
     }
 })
 
 // Action creators
-export const { changeBalanceARS, changeBalanceUSD, changeMode, addTxRegistry, resetTxsHistory } = userDataSlice.actions
+export const { changeBalanceARS, changeBalanceUSD, changeMode, addTxRegistry, resetTxsHistory, changeLang } = userDataSlice.actions
 
 // Slice Reducer
 export default userDataSlice.reducer
@@ -60,3 +65,4 @@ export const selectBalanceARS = (state: RootState) => state.userData.balanceARS
 export const selectBalanceUSD = (state: RootState) => state.userData.balanceUSD
 export const selectMode       = (state: RootState) => state.userData.mode
 export const selectTxsHistory = (state: RootState) => state.userData.txsHistory
+export const selectLang       = (state: RootState) => state.userData.lang

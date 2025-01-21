@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { store } from '../app/store';
 import { describe, it, expect } from '@jest/globals';
 import '@testing-library/jest-dom';
+import { ES } from '@/lang/ES';
 
 describe('BuyCard Component', () => {
     
@@ -20,7 +21,8 @@ describe('BuyCard Component', () => {
     const defaultProps = {
         AL30Data: mockAL30Data,
         balanceARS: 100000,
-        balanceUSD: 100
+        balanceUSD: 100,
+        selectedLangObject: ES
     };
 
     it('should render without crashing', () => {

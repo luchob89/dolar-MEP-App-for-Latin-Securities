@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { store } from '../app/store';
 import { describe, it, expect, jest } from '@jest/globals';
 import '@testing-library/jest-dom';
+import { ES } from '@/lang/ES';
 
 describe('BuyCalculationResult Component', () => {
     const mockAL30Data: AL30Data = {
@@ -25,6 +26,7 @@ describe('BuyCalculationResult Component', () => {
         dispatch: jest.fn(),
         ars_ask: 100,
         AL30Price: 1,
+        selectedLangObject: ES
     };
 
     it('should render without crashing', () => {

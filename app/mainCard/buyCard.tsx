@@ -8,7 +8,7 @@ import { AL30Data } from '../page';
 import { useState } from 'react';
 import { formatARS, formatUSD } from './mainCard'
 import { BuyCalculationResult } from './BuyCalculationResult';
-export default function BuyCard({ AL30Data }: { AL30Data: AL30Data }) {
+export default function BuyCard({ AL30Data, selectedLangObject }: { AL30Data: AL30Data, selectedLangObject: any }) {
 
     const dispatch   = useAppDispatch()
     const balanceARS = useAppSelector(selectBalanceARS)
@@ -38,8 +38,8 @@ export default function BuyCard({ AL30Data }: { AL30Data: AL30Data }) {
     const submitHandler = () => {
         setError(null)
         // Validation
-        if ( buyAmount === 0 ) return setError('Por favor, seleccione un monto válido.')
-        if ( buyAmount < 0 ) return setError('Por favor, seleccione un monto mayor a 0.')
+        if ( buyAmount === 0 ) return setError(selectedLangObject.monto_valido)
+        if ( buyAmount < 0 ) return setError(selectedLangObject.un_monto_positivo)
         setStatus('ready')
     }
 
@@ -68,21 +68,21 @@ export default function BuyCard({ AL30Data }: { AL30Data: AL30Data }) {
         <Fade in appear>
             <Card className='text-center'>
                 <Card.Body>
-                    <Card.Title className='mb3'><h4>Compra de Dólar MEP</h4></Card.Title>
-                    <Card.Subtitle className="mb-3 text-muted">Calculadora de compra de títulos</Card.Subtitle>
+                    <Card.Title className='mb3'><h4>{selectedLangObject.compraMEP}</h4></Card.Title>
+                    <Card.Subtitle className="mb-3 text-muted">{selectedLangObject.calculadora_compra}</Card.Subtitle>
 
                     <div className='mt-3 d-flex justify-content-around align-items-center'>
-                        <h6>Saldo ARS: <strong>{formatARS(balanceARS)}</strong></h6>
+                        <h6>{selectedLangObject.saldoARS}: <strong>{formatARS(balanceARS)}</strong></h6>
                     </div>
                     <div className='mb-1 d-flex justify-content-around align-items-center'>
-                        <h6>Saldo USD: <strong>{formatUSD(balanceUSD)}</strong></h6>
+                        <h6>{selectedLangObject.saldoUSD}: <strong>{formatUSD(balanceUSD)}</strong></h6>
                     </div>
 
                     <Form onSubmit={e => { e.preventDefault(); submitHandler() }}>
                         <Form.Group className="mb-3" controlId="formAmount">
-                            <Form.Label><strong className='color-blue'>Monto a comprar</strong></Form.Label>
-                            <Form.Control type="number" className='text-center' placeholder="Seleccione monto en USD" onChange={buyAmountHandler} />
-                            <Button className='w-100 mt-3 mb-2' variant='custom1' size='sm' onClick={allHandler}>Comprar todo mi disponible</Button>
+                            <Form.Label><strong className='color-blue'>{selectedLangObject.monto_comprar}</strong></Form.Label>
+                            <Form.Control type="number" className='text-center' placeholder={selectedLangObject.seleccioneUSD} onChange={buyAmountHandler} />
+                            <Button className='w-100 mt-3 mb-2' variant='custom1' size='sm' onClick={allHandler}>{selectedLangObject.comprar_disponible}</Button>
                         </Form.Group>
                     </Form>
 
@@ -90,10 +90,10 @@ export default function BuyCard({ AL30Data }: { AL30Data: AL30Data }) {
 
                     <div className="d-flex gap-2 mb-2 justify-content-center">
                         <Button variant="custom2" className='w-100' onClick={submitHandler}>
-                            Calcular
+                            {selectedLangObject.calcular}
                         </Button>
                         <Button variant="light" className='w-100' onClick={() => { dispatch(changeMode('')) }}>
-                            Volver
+                            {selectedLangObject.volver}
                         </Button>
                     </div>
 
@@ -106,6 +106,7 @@ export default function BuyCard({ AL30Data }: { AL30Data: AL30Data }) {
                         dispatch={dispatch}
                         ars_ask={ars_ask}
                         AL30Price={AL30Price}
+                        selectedLangObject={selectedLangObject}
                     />
 
                 </Card.Body>

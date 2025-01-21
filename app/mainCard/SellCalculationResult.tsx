@@ -8,7 +8,7 @@ import { AL30Data } from '../page';
 import { useState } from 'react';
 import { formatARS, formatUSD } from './mainCard';
 
-export const SellCalculationResult = ({ amount, status, AL30Data, balanceARS, balanceUSD, dispatch }: { amount: number; status: 'pending' | 'ready'; AL30Data: AL30Data; balanceARS: number; balanceUSD: number; dispatch: (...args: unknown[]) => unknown; }) => {
+export const SellCalculationResult = ({ amount, status, AL30Data, balanceARS, balanceUSD, dispatch, selectedLangObject }: { amount: number; status: 'pending' | 'ready'; AL30Data: AL30Data; balanceARS: number; balanceUSD: number; dispatch: (...args: unknown[]) => unknown; selectedLangObject: any }) => {
 
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -70,35 +70,35 @@ export const SellCalculationResult = ({ amount, status, AL30Data, balanceARS, ba
     };
 
     // Condición para mostrar mensaje de error y deshabilitar botón de acción
-    const showError = USD_cost > balanceUSD || nominals === 0 ? true : false;
+    const showError = USD_cost > balanceUSD || nominals <= 0 ? true : false;
 
     if (status === 'ready' && amount !== 0) return (
         <>
             <Fade in appear>
                 <div className='mt-4 tx-data-container'>
-                    <div><strong>Monto a vender:</strong> {formattedAmount}</div>
-                    <div><strong>Cotización de venta:</strong> {formatUSD(AL30Price)}</div>
-                    <div><strong>Bono:</strong> {AL30Data.ticker}D</div>
-                    <div><strong>Cant. de títulos:</strong> {new Intl.NumberFormat("de-DE").format(nominals)}</div>
-                    <div><strong>Monto a debitar en USD:</strong> <strong className={showError ? 'text-danger' : 'text-success'}>{formatUSD(USD_cost)}</strong></div>
-                    <div className='mb-3'><strong>Compra ARS final:</strong> <strong className={showError ? 'text-danger' : 'text-success'}>{formatARS(ARSToGet)}</strong></div>
+                    <div><strong>{selectedLangObject.monto_vender}:</strong> {formattedAmount}</div>
+                    <div><strong>{selectedLangObject.cotizacion_venta}:</strong> {formatUSD(AL30Price)}</div>
+                    <div><strong>{selectedLangObject.bono}:</strong> {AL30Data.ticker}D</div>
+                    <div><strong>{selectedLangObject.cant_titulos}:</strong> {new Intl.NumberFormat("de-DE").format(nominals)}</div>
+                    <div><strong>{selectedLangObject.monto_debitar_USD}:</strong> <strong className={showError ? 'text-danger' : 'text-success'}>{formatUSD(USD_cost)}</strong></div>
+                    <div className='mb-3'><strong>{selectedLangObject.compra_ARS_final}:</strong> <strong className={showError ? 'text-danger' : 'text-success'}>{formatARS(ARSToGet)}</strong></div>
                     
-                    {showError && <Alert className='mt-2' variant={'danger'}>Saldo insuficiente. Por favor, elija un monto menor.</Alert>}
+                    {showError && <Alert className='mt-2' variant={'danger'}>{selectedLangObject.saldo_insuficiente}</Alert>}
 
-                    <small className="text-muted"><strong>Tip: </strong>Puede seguir editando el monto para encontrar nuevos resultados.</small>
+                    <small className="text-muted"><strong>Tip: </strong>{selectedLangObject.tip}</small>
 
                     <div className='mt-2'>
-                        <Button className='w-100' variant={'danger'} disabled={showError} onClick={openConfirmationModal}>Vender</Button>
+                        <Button className='w-100' variant={'danger'} disabled={showError} onClick={openConfirmationModal}>{selectedLangObject.vender}</Button>
                     </div>
                 </div>
             </Fade>
 
             <Modal show={showConfirmationModal} onHide={closeConfirmationModal} centered>
                 <Modal.Header closeButton className='noBorderBottom'>
-                    <Modal.Title>Confirmar venta de USD</Modal.Title>
+                    <Modal.Title>{selectedLangObject.confirmar_venta}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <h5 className='text-center'>¿Desea continuar?</h5>
+                    <h5 className='text-center'>{selectedLangObject.desea_continuar}</h5>
                     <div className='d-flex justify-content-center align-items-center'>
                         <div className='text-decoration-line-through'>{formatARS(balanceARS)}</div>&nbsp; → &nbsp;<strong className='text-success'>{formatARS(balanceARS + ARSToGet)}</strong>
                     </div>
@@ -107,20 +107,20 @@ export const SellCalculationResult = ({ amount, status, AL30Data, balanceARS, ba
                     </div>
                 </Modal.Body>
                 <Modal.Footer className='justify-content-center noBorderTop'>
-                    <Button variant="danger" disabled={isLoading} onClick={sellMEP}>{isLoading ? <Spinner animation="border" size="sm" variant="light" /> : 'Aceptar'}</Button>
-                    {!isLoading && <Button variant="secondary" disabled={isLoading} onClick={closeConfirmationModal}>Cancelar</Button>}
+                    <Button variant="danger" disabled={isLoading} onClick={sellMEP}>{isLoading ? <Spinner animation="border" size="sm" variant="light" /> : selectedLangObject.aceptar}</Button>
+                    {!isLoading && <Button variant="secondary" disabled={isLoading} onClick={closeConfirmationModal}>{selectedLangObject.cancelar}</Button>}
                 </Modal.Footer>
             </Modal>
 
             <Modal show={showSuccessModal} onHide={closeSuccessModal} centered>
                 <Modal.Header closeButton className='noBorderBottom'>
-                    <Modal.Title className='text-success fw-bolder'>Éxito!</Modal.Title>
+                    <Modal.Title className='text-success fw-bolder'>{selectedLangObject.exito}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <h5 className='text-center text-success'>La operación fue realizada correctamente.</h5>
+                    <h5 className='text-center text-success'>{selectedLangObject.operacion_realizada}</h5>
                 </Modal.Body>
                 <Modal.Footer className='justify-content-center noBorderTop'>
-                    <Button variant="success" onClick={closeSuccessModal}>Aceptar</Button>
+                    <Button variant="success" onClick={closeSuccessModal}>{selectedLangObject.aceptar}</Button>
                 </Modal.Footer>
             </Modal>
         </>

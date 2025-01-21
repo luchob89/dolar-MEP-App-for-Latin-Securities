@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { store } from '../app/store';
 import { describe, it, expect } from '@jest/globals';
 import '@testing-library/jest-dom';
-import { formatUSD } from '@/app/mainCard/mainCard';
+import { ES } from '@/lang/ES';
 
 describe('TxsHistoryTable Component', () => {
     const mockTxs = [
@@ -29,6 +29,7 @@ describe('TxsHistoryTable Component', () => {
 
     const defaultProps = {
         txs: mockTxs,
+        selectedLangObject: ES
     };
 
     it('should render without crashing', () => {
