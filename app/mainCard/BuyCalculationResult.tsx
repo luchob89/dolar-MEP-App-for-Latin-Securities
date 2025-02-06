@@ -18,7 +18,7 @@ export const BuyCalculationResult = ({ amount, status, AL30Data, balanceARS, bal
     const openConfirmationModal = () => setShowConfirmationModal(true);
     const openSuccessModal = () => setShowSuccessModal(true);
     const closeSuccessModal = () => {
-        // Obtenemos la fecha actual
+        // Current Date
         const date = new Date();
         const options: Intl.DateTimeFormatOptions = {
             day: '2-digit',
@@ -29,25 +29,26 @@ export const BuyCalculationResult = ({ amount, status, AL30Data, balanceARS, bal
             minute: 'numeric',
             second: 'numeric'
         };
-        // Modificamos el balance en pesos
+        // Modify ARS balance
         dispatch(changeBalanceARS(balanceARS - ARS_cost));
-        // Modificamos el balance en dólares
+        // Modify USD balance
         dispatch(changeBalanceUSD(balanceUSD + finalUSDBuy));
-        // Agregamos el registro al historial de transacciones
+        // Add transaction to history
         dispatch(addTxRegistry({ type: 'buy', amount: finalUSDBuy, date: date.toLocaleDateString(undefined, options), price: AL30Price, pre: balanceARS, post: balanceARS - ARS_cost }))
-        // Volvemos a la pantalla principal
+        // Back to mainCard
         dispatch(changeMode(''));
     }
 
-    // Monto a comprar formateado
+    // Formatted amount to buy
     const formattedAmount = formatUSD(amount);
-    // Redondeamos los títulos a número entero
+    // Round nominals down to nearest integer
     const nominals = Math.floor(amount * AL30Price / ars_ask);
-    // Costo en ARS
+    // Cost in ARS
     const ARS_cost = nominals * ars_ask;
-    // Compra final de USD
+    // Final USD buy
     const finalUSDBuy = ARS_cost / AL30Price;
 
+    // Simulate network request to "save" the transaction on a DB
     function simulateNetworkRequest() {
         return new Promise(resolve => {
             setTimeout(resolve, 500);
@@ -56,15 +57,15 @@ export const BuyCalculationResult = ({ amount, status, AL30Data, balanceARS, bal
 
     const buyMEP = () => {
         setLoading(true)
-        simulateNetworkRequest().then(() => {
-            // Ocultamos el modal de confirmación
+        simulateNetworkRequest().then( () => {
+            // Close confirmation modal
             closeConfirmationModal();
-            // Mostramos el modal de éxito de la operación
+            // Open success modal
             openSuccessModal();
         });
     };
 
-    // Condición para mostrar mensaje de error y deshabilitar botón de acción
+    // Condition to show error message and disable action button
     const showError = ARS_cost > balanceARS || nominals === 0 ? true : false;
 
     if (status === 'ready' && amount !== 0) return (

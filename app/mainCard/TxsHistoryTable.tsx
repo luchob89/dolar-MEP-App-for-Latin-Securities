@@ -4,10 +4,10 @@ import { formatUSD, formatARS } from './mainCard';
 
 export const TxsHistoryTable = ({ txs, selectedLangObject }: { txs: txRegistry[], selectedLangObject: { [k: string]: string } }) => {
 
-    // Hook para detectar si estamos en desktop o mobile
+    // Hook for detecting Desktop or Mobile device
     const [isDesktop, setIsDesktop] = useState<boolean>(true);
 
-    // Hook para detectar el tamaño de la pantalla
+    // Hook for detecting screen size
     useEffect(() => {
         const handleResize = () => {
             setIsDesktop(window.innerWidth > 768);

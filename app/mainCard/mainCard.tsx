@@ -11,11 +11,13 @@ import { TxsHistoryTable } from './TxsHistoryTable';
 import { ES } from '@/lang/ES';
 import { EN } from '@/lang/EN';
 
+// Helper functions to format currency
 export const formatARS = (amount: number) => new Intl.NumberFormat("de-DE", { style: "currency", currency: "ARS" }).format(amount);
 export const formatUSD = (amount: number) => new Intl.NumberFormat("de-DE", { style: "currency", currency: "USD", currencyDisplay: 'code' }).format(amount);
 
 export default function MainCard({ AL30Data }: { AL30Data: AL30Data }) {
 
+    // Dispatch and selectors Redux hooks
     const dispatch      = useAppDispatch()
     const mode          = useAppSelector(selectMode)
     const balanceARS    = useAppSelector(selectBalanceARS)
@@ -29,11 +31,16 @@ export default function MainCard({ AL30Data }: { AL30Data: AL30Data }) {
         dispatch(changeMode('chooseAmounts'))
     }
 
+    // Language object
     const selectedLangObject: { [k: string]: string } = userDataLang === 'ES'? ES : EN;
 
+    // Conditional rendering
     if ( mode === 'chooseAmounts' ) return <ChooseAmounts selectedLangObject={selectedLangObject} />
     if ( mode === 'buy' ) return <BuyCard AL30Data={AL30Data} selectedLangObject={selectedLangObject} />
-    if ( mode === 'sell' ) return <SellCard AL30Data={AL30Data} selectedLangObject={selectedLangObject} />
+    if (mode === 'sell') return <SellCard AL30Data={AL30Data} selectedLangObject={selectedLangObject} />
+
+    const BuyformattedPrice = new Intl.NumberFormat("de-DE", { maximumFractionDigits: 2 }).format((AL30Data.ars_ask / 100) / (AL30Data.usd_bid / 100));
+    const SellformattedPrice = new Intl.NumberFormat("de-DE", { maximumFractionDigits: 2 }).format((AL30Data.ars_bid / 100) / (AL30Data.usd_ask / 100));
 
     return (
     <>
@@ -57,11 +64,11 @@ export default function MainCard({ AL30Data }: { AL30Data: AL30Data }) {
                     <div className="d-flex gap-2 mb-2 mt-2 justify-content-center">
                         <Button className='mainCard-btns' variant="success" disabled={balanceARS === 0} onClick={() => { dispatch(changeMode('buy')) }}>
                             {selectedLangObject.comprarUSD}
-                            <small className='mainCard-small-text'>US${new Intl.NumberFormat("de-DE", { maximumFractionDigits: 2 }).format((AL30Data.ars_ask / 100) / (AL30Data.usd_bid / 100))}</small>
+                            <small className='mainCard-small-text'>US${BuyformattedPrice}</small>
                         </Button>
                         <Button className='mainCard-btns' variant="danger" disabled={balanceUSD === 0} onClick={() => { dispatch(changeMode('sell')) }}>
                             {selectedLangObject.venderUSD}
-                            <small className='mainCard-small-text'>US${new Intl.NumberFormat("de-DE", { maximumFractionDigits: 2 }).format((AL30Data.ars_bid / 100) / (AL30Data.usd_ask / 100))}</small>
+                            <small className='mainCard-small-text'>US${SellformattedPrice}</small>
                         </Button>
                     </div>
 

@@ -15,10 +15,10 @@ export default function BuyCard({ AL30Data, selectedLangObject }: { AL30Data: AL
     const balanceARS = useAppSelector(selectBalanceARS)
     const balanceUSD = useAppSelector(selectBalanceUSD)
 
-    // Los costos llegan de la API en centavos
+    // Prices get from AL30Data come in cents, so we divide by 100 to get the real price.
     const ars_ask = AL30Data.ars_ask / 100;
     const usd_bid = AL30Data.usd_bid / 100;
-    // Precio del bono en USD
+    // Bond price in USD
     const AL30Price = ars_ask / usd_bid;
 
     const [buyAmount, setBuyAmount] = useState(0);

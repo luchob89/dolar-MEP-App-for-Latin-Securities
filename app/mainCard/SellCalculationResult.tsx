@@ -18,7 +18,7 @@ export const SellCalculationResult = ({ amount, status, AL30Data, balanceARS, ba
     const openConfirmationModal = () => setShowConfirmationModal(true);
     const openSuccessModal = () => setShowSuccessModal(true);
     const closeSuccessModal = () => {
-        // Obtenemos la fecha actual
+        // Current Date
         const date = new Date();
         const options: Intl.DateTimeFormatOptions = {
             day: '2-digit',
@@ -29,30 +29,31 @@ export const SellCalculationResult = ({ amount, status, AL30Data, balanceARS, ba
             minute: 'numeric',
             second: 'numeric'
         };
-        // Modificamos el balance en pesos
+        // Modify ARS balance
         dispatch(changeBalanceARS(balanceARS + ARSToGet));
-        // Modificamos el balance en dólares
+        // Modify USD balance
         dispatch(changeBalanceUSD(balanceUSD - USD_cost));
-        // Agregamos el registro al historial de transacciones
+        // Add transaction to history
         dispatch(addTxRegistry({ type: 'sell', amount: USD_cost, date: date.toLocaleDateString(undefined, options), price: AL30Price, pre: balanceUSD, post: balanceUSD - USD_cost }))
-        // Volvemos a la pantalla principal
+        // Back to mainCard
         dispatch(changeMode(''))
     }
 
-    // Monto a vender formateado
+    // Formatted amount to sell
     const formattedAmount = formatUSD(amount);
-    // Los costos llegan de la API en centavos
+    // Costs are in cents, so we divide by 100 to get the real price
     const usd_ask = AL30Data.usd_ask / 100;
     const ars_bid = AL30Data.ars_bid / 100;
-    // Precio del bono en USD
+    // Bond price in USD
     const AL30Price = ars_bid / usd_ask;
-    // Redondeamos los títulos a número entero
+    // Round nominals down to nearest integer
     const nominals = Math.floor(amount / usd_ask);
-    // Costo en USD
+    // USD cost
     const USD_cost = nominals * usd_ask;
-    // Compra final de USD
+    // Final USD buy
     const ARSToGet = nominals * ars_bid;
 
+    // Simulate network request to "save" the transaction on a DB
     function simulateNetworkRequest() {
         return new Promise(resolve => {
             setTimeout(resolve, 500);
@@ -62,14 +63,14 @@ export const SellCalculationResult = ({ amount, status, AL30Data, balanceARS, ba
     const sellMEP = () => {
         setLoading(true)
         simulateNetworkRequest().then(() => {
-            // Ocultamos el modal de confirmación
+            // Close confirmation modal
             closeConfirmationModal();
-            // Mostramos el modal de éxito de la operación
+            // Open success modal
             openSuccessModal();
         });
     };
 
-    // Condición para mostrar mensaje de error y deshabilitar botón de acción
+    // Condition to show error message and disable action button
     const showError = USD_cost > balanceUSD || nominals <= 0 ? true : false;
 
     if (status === 'ready' && amount !== 0) return (
