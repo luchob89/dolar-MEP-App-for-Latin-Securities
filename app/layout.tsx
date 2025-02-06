@@ -13,15 +13,15 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Dolar MEP App",
-  description: "Technical test for Latin Securities Company",
-  icons: [
-    { rel: "icon", url: "/favicon-16x16.png" }, 
-    { rel: "icon", url: "/favicon-32x32.png" }, 
-    { rel: "apple-touch-icon", url: "/apple-touch-icon.png" }
-  ]
-};
+//export const metadata: Metadata = {
+//  title: "Dolar MEP App",
+//  description: "Technical test for Latin Securities Company",
+//  icons: [
+//    { rel: "icon", url: "/favicon-16x16.png" }, 
+//    { rel: "icon", url: "/favicon-32x32.png" }, 
+//    { rel: "apple-touch-icon", url: "/apple-touch-icon.png" }
+//  ]
+//};
 
 export default function RootLayout({
   children,

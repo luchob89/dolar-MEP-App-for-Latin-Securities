@@ -52,18 +52,20 @@ export default function BuyCard({ AL30Data, selectedLangObject }: { AL30Data: AL
             .btn-custom1 {
               background-color: #000039;
               color: white;
-            }
-            .btn-custom1:hover {
-              background-color: #000029;
-              color: white;
+
+              &:hover {
+                background-color: #000029;
+                color: white;
+                }
             }
             .btn-custom2 {
               background-color: rgb(51, 151, 244);
               color: white;
-            }
-            .btn-custom2:hover {
-              background-color: rgb(51, 121, 800);
-              color: white;
+
+              &:hover {
+                background-color: rgb(51, 121, 800);
+                color: white;
+                }
             }
         `}
         </style>
