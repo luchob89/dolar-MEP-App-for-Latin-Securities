@@ -4,21 +4,18 @@ import { formatUSD, formatARS } from './mainCard';
 
 export const TxsHistoryTable = ({ txs, selectedLangObject }: { txs: txRegistry[], selectedLangObject: { [k: string]: string } }) => {
 
-    // Hook for detecting Desktop or Mobile device
+    // We will evaluate if user device is Desktop or Mobile. Txs history table will show more or less columns depending on this.
     const [isDesktop, setIsDesktop] = useState<boolean>(true);
 
-    // Hook for detecting screen size
+    // Detect screen size
     useEffect(() => {
-        const handleResize = () => {
-            setIsDesktop(window.innerWidth > 768);
-        };
+        const handleResize = () => setIsDesktop(window.innerWidth > 768);
 
         handleResize();
+
         window.addEventListener('resize', handleResize);
 
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     if (txs.length > 0) return (
