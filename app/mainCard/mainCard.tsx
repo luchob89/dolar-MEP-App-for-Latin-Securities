@@ -39,8 +39,8 @@ export default function MainCard({ AL30Data }: { AL30Data: AL30Data }) {
     if ( mode === 'buy' ) return <BuyCard AL30Data={AL30Data} selectedLangObject={selectedLangObject} />
     if (mode === 'sell') return <SellCard AL30Data={AL30Data} selectedLangObject={selectedLangObject} />
 
-    const BuyformattedPrice = new Intl.NumberFormat("de-DE", { maximumFractionDigits: 2 }).format((AL30Data.ars_ask / 100) / (AL30Data.usd_bid / 100));
-    const SellformattedPrice = new Intl.NumberFormat("de-DE", { maximumFractionDigits: 2 }).format((AL30Data.ars_bid / 100) / (AL30Data.usd_ask / 100));
+    // const BuyformattedPrice = new Intl.NumberFormat("de-DE", { maximumFractionDigits: 2 }).format((AL30Data.ars_ask / 100) / (AL30Data.usd_bid / 100));
+    // const SellformattedPrice = new Intl.NumberFormat("de-DE", { maximumFractionDigits: 2 }).format((AL30Data.ars_bid / 100) / (AL30Data.usd_ask / 100));
 
     return (
     <>

@@ -10,8 +10,10 @@ import { changeBalanceARS, changeBalanceUSD, changeMode, selectBalanceARS, selec
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { useState } from "react";
 import { formatARS, formatUSD } from './mainCard';
+import { ES } from '@/lang/ES';
+import { EN } from '@/lang/EN';
 
-export default function ChooseAmounts({ selectedLangObject }: { selectedLangObject: { [k: string]: string } }) {
+export default function ChooseAmounts() {
 
     const dispatch = useAppDispatch();
     const balanceARS = useAppSelector(selectBalanceARS);
@@ -24,6 +26,9 @@ export default function ChooseAmounts({ selectedLangObject }: { selectedLangObje
     const [resetButtonWasPressed, setResetButtonWasPressed] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [lang, setLang] = useState<string>(userDataLang);
+
+    // Language object
+    const selectedLangObject: { [k: string]: string } = lang === 'ES'? ES : EN;
 
     const ARSAmountHandler = (e: { target: { value: string } }) => {
         setError(null);
@@ -50,11 +55,12 @@ export default function ChooseAmounts({ selectedLangObject }: { selectedLangObje
         // Set and 'redirect'
         dispatch(changeBalanceARS(ARSAmount));
         dispatch(changeBalanceUSD(USDAmount));
-        dispatch(changeMode(''));
+        //dispatch(changeMode(''));
     };
 
     const submitDefault = () => {
-        dispatch(changeMode(''));
+        // 'redirect'
+        //dispatch(changeMode(''));
     }
 
     const langHandler = (e: { currentTarget: { value: string } }) => {
