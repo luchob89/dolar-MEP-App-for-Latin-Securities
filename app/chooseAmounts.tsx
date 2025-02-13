@@ -6,12 +6,15 @@ import Alert from 'react-bootstrap/Alert';
 import ButtonGroup  from 'react-bootstrap/ButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { changeBalanceARS, changeBalanceUSD, changeMode, selectBalanceARS, selectBalanceUSD, selectTxsHistory, resetTxsHistory, selectLang, changeLang } from "../../features/userDataSlice";
-import { useAppDispatch, useAppSelector } from "../hooks";
+import { changeBalanceARS, changeBalanceUSD, selectBalanceARS, selectBalanceUSD, selectTxsHistory, resetTxsHistory, selectLang, changeLang } from "@/lib/userDataSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { useState } from "react";
-import { formatARS, formatUSD } from './mainCard';
+import { formatARS, formatUSD } from '@/features/amountsFormatFx';
+import { ES } from '@/lang/ES';
+import { EN } from '@/lang/EN';
+import { useRouter } from 'next/navigation';
 
-export default function ChooseAmounts({ selectedLangObject }: { selectedLangObject: { [k: string]: string } }) {
+export default function ChooseAmounts() {
 
     const dispatch = useAppDispatch();
     const balanceARS = useAppSelector(selectBalanceARS);
@@ -19,11 +22,16 @@ export default function ChooseAmounts({ selectedLangObject }: { selectedLangObje
     const txsHistory = useAppSelector(selectTxsHistory);
     const userDataLang = useAppSelector(selectLang);
 
+    const router = useRouter()
+
     const [ARSAmount, setARSAmount] = useState<number | null>(null);
     const [USDAmount, setUSDAmount] = useState<number | null>(null);
     const [resetButtonWasPressed, setResetButtonWasPressed] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [lang, setLang] = useState<string>(userDataLang);
+
+    // Language object
+    const selectedLangObject: { [k: string]: string } = lang === 'ES'? ES : EN;
 
     const ARSAmountHandler = (e: { target: { value: string } }) => {
         setError(null);
@@ -50,11 +58,12 @@ export default function ChooseAmounts({ selectedLangObject }: { selectedLangObje
         // Set and 'redirect'
         dispatch(changeBalanceARS(ARSAmount));
         dispatch(changeBalanceUSD(USDAmount));
-        dispatch(changeMode(''));
+        router.push('/mainCard')
     };
 
     const submitDefault = () => {
-        dispatch(changeMode(''));
+        // 'redirect'
+        router.push('/mainCard')
     }
 
     const langHandler = (e: { currentTarget: { value: string } }) => {
