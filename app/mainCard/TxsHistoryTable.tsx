@@ -1,6 +1,6 @@
-import { txRegistry } from '@/features/userDataSlice';
+import { txRegistry } from '@/lib/userDataSlice';
 import { useState, useEffect } from 'react';
-import { formatUSD, formatARS } from './mainCard';
+import { formatUSD, formatARS } from '@/features/amountsFormatFx';
 
 export const TxsHistoryTable = ({ txs, selectedLangObject }: { txs: txRegistry[], selectedLangObject: { [k: string]: string } }) => {
 

@@ -32,6 +32,13 @@
   grid-row-start: 2;
 }
 
+.not_found_container {
+  text-align: center;
+  padding: 3rem;
+  background-color: #fff;
+  border-radius: 10px;
+}
+
 .main ol {
   font-family: var(--font-geist-mono);
   padding-left: 0;
