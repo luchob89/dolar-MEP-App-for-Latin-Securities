@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import MainCard from '../app/mainCard/mainCard';
+import MainCard from '../app/mainCard/page';
 import { AL30Data } from '../app/page';
 import { Provider } from 'react-redux';
 import { store } from '../app/store';
