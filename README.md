@@ -20,77 +20,92 @@ https://dolar-mep-app-for-latin-securities.vercel.app/
 - **Sell USD**: Calculate and execute the sale of USD to obtain ARS.
 - **Transaction History**: View a history of all buy and sell transactions.
 - **Balance Management**: Track and update balances in ARS and USD.
+- **Live AL30 bond pricing**: Buy/sell rates are calculated from a live AL30 bond quote fetched on each visit.
+- **EN/ES language toggle**: Switch the whole interface between English and Spanish.
 
-## Components
+## Routes & Components
 
-### `App`
+The app is built on the Next.js App Router, so each screen is a real route rather than client-side state toggling within a single page.
 
-The main entry point of the application. Sets up the Redux provider and renders the `ChooseAmounts`, `MainCard`, `BuyCard`, and `Sellcard` components.
+### `/` — `app/page.tsx`
 
-### `ChooseAmounts`
+Landing route. Renders `ChooseAmounts` (`app/chooseAmounts.tsx`), which lets users enter initial balance amounts in ARS and USD for a simulation closer to their own numbers, or continue with the app's default balances. Inputs are validated (must be > 0 and ≤ 100,000,000). If one or more transactions have already been made, this screen also shows a button to clear the Transaction History.
 
-Allows users to enter initial balance amounts in ARS and USD to perform an accurate simulation of values close to the client's reality, or to continue using the application's default balances if the client decides to test its functionality without filling in the initial fields. These fields include input validation and error handling for balances less than or equal to 0. Additionally, if one or more transactions have been made, this screen includes a button to clear the Transaction History.
+### `/mainCard` — `app/mainCard/page.tsx`
 
-### `MainCard`
+Main hub. Displays current ARS/USD balances and buttons to go to the buy or sell flow, each annotated with the live buy/sell rate. Once one or more transactions exist, it renders `TxsHistoryTable` (`app/mainCard/TxsHistoryTable.tsx`) below, showing more columns on desktop than on mobile.
 
-The main component that provides the interface for buying and selling USD. Displays initial balances in ARS and USD, along with buttons to choose the action, accompanied by the current buy/sell rate. When one or more transactions have been made, this component includes the Transaction History table below the main component.
+### `/mainCard/buy` — `app/mainCard/buy/page.tsx`
 
-### `BuyCard`
+Lets the user enter the ARS amount to spend buying USD (or use "Buy all my available balance" to compute the max automatically), with validation and error handling. On calculating, it renders `BuyCalculationResult` (`app/mainCard/buy/BuyCalculationResult.tsx`), which shows the buy quote, bond ticker, number of bonds, ARS to debit and final USD credited, and drives the confirm/success modals for the transaction.
 
-Provides the interface for entering the ARS amount to be used to buy USD. Includes input validation with error handling for balances less than or equal to 0 and a "Buy all my available balance" button to automatically calculate how many bonds can be purchased with the current ARS balance.
+### `/mainCard/sell` — `app/mainCard/sell/page.tsx`
 
-### `SellCard`
-
-Provides the interface for entering the USD amount to be sold to obtain ARS. Includes input validation with error handling for balances less than or equal to 0 and a "Sell all my available balance" button to automatically calculate how many bonds can be sold with the current USD balance.
-
-### `BuyCalculationResult`
-
-Handles the calculation and display of results for buy transactions. Shows the amount to buy, the current purchase rate, the bond name, the number of bonds to buy, the amount to credit in ARS, and the final purchase amount in USD. It also manages the confirmation and success modals for buy operations.
-
-### `SellCalculationResult`
-
-Handles the calculation and display of results for sell transactions. Shows the amount to sell, the current sale rate, the bond name, the number of bonds to sell, the amount to debit in USD, and the final sale amount in ARS. It also manages the confirmation and success modals for sell operations.
-
-### `TxsHistoryTable`
-
-Displays a table with all past transactions, including different details for desktop and mobile devices. For the former, it shows the date, transaction type, pre-balance (in ARS for purchases, in USD for sales), purchased/sold amount, post-balance (in ARS for purchases, in USD for sales), and the exchange rate used for the transaction. For mobile devices, the data is limited to the date, purchased/sold amount, and the exchange rate used. This table can be cleared on the previous `ChooseAmounts` screen in case previous records need to be "reset" for a new balance selection.
+The sell-side mirror of the above: enter (or auto-fill) the USD amount to sell, then `SellCalculationResult` (`app/mainCard/sell/SellCalculationResult.tsx`) shows the sell quote and drives the confirm/success modals.
 
 ## State Management
 
-The application uses Redux for state management. The main state slice is `userDataSlice`, which includes actions to change balances, switch modes (which, in turn, changes the screen rendered for the client), and add transaction records.
+Redux (via Redux Toolkit) manages balances, transaction history, and the selected language. The store (`lib/store.ts`) and its single slice, `userDataSlice` (`lib/userDataSlice.ts`), are provided once at the root layout (`app/layout.tsx`) via `lib/CustomReduxProvider.tsx`, so every route shares the same state. AL30 bond pricing is fetched separately with a small SWR hook (`features/getAL30Data.ts`) rather than through Redux, since it's remote, cached data rather than user state.
 
 ## Testing
 
-The application includes unit tests for all main components using Jest and React Testing Library. This first version of the tests covers only correct rendering, input changes, error handling, and basic action dispatching.
+The app has unit/integration tests for every screen and calculation component using Jest and React Testing Library (`npm test`, 46 tests across 7 suites). They cover rendering, input validation, navigation, error states, and the buy/sell confirmation flow, with a fresh preloaded Redux store per test.
+
+## Scripts
+
+| Script | What it does |
+| --- | --- |
+| `npm run dev` | Start the local dev server (Turbopack) |
+| `npm run build` | Production build |
+| `npm start` | Build and run the production server |
+| `npm run lint` | ESLint via `next lint` |
+| `npm run typecheck` | TypeScript check with no emit |
+| `npm test` | Run the Jest test suite |
+| `npm run verify` | Run lint, typecheck, and tests together |
 
 ## Installation
 
 To install and run the application locally, follow these steps:
 
 1. Clone the repository:
-    
-	```
-	git clone https://github.com/luchob89/dolar-MEP-App-for-Latin-Securities
-	```
-	
+
+    ```
+    git clone https://github.com/luchob89/dolar-MEP-App-for-Latin-Securities
+    ```
+
 2. Navigate to the project directory:
 
     ```
-	cd dolar-MEP-App-for-Latin-Securities
-	```
-	
+    cd dolar-MEP-App-for-Latin-Securities
+    ```
+
 3. Install dependencies:
-    
-	```
-	npm install
-	```
-	
-4. Build and start a production version:
-    
-	```
-	npm start
-	```
-	
+
+    ```
+    npm install
+    ```
+
+4. Run it locally in development mode:
+
+    ```
+    npm run dev
+    ```
+
+   Or build and start a production version:
+
+    ```
+    npm start
+    ```
+
+### Running with Docker
+
+A `Dockerfile` is included (multi-stage build, standalone Next.js output):
+
+```
+docker build -t dolar-mep-app .
+docker run -p 3000:3000 dolar-mep-app
+```
+
 ## Usage
 
 1. Open the application in your browser.
@@ -98,4 +113,3 @@ To install and run the application locally, follow these steps:
 3. Click the "Buy USD" button to buy USD or the "Sell USD" button to sell USD.
 4. Confirm the transaction in the modal that appears.
 5. View the updated balances and transaction history.
-

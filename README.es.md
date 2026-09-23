@@ -1,5 +1,7 @@
 # Aplicación de compra/venta de Dólar MEP para Latin Securities
 
+[![en](https://img.shields.io/badge/lang-en-blue.svg)](https://github.com/luchob89/dolar-MEP-App-for-Latin-Securities/blob/main/README.md)
+
 ## Descripción General
 
 Esta aplicación de compra/venta de Dólar MEP es una simulación de una herramienta financiera diseñada para facilitar la compra y venta de USD utilizando ARS a través del bono AL30. La aplicación permite a los usuarios calcular los costos de transacción, ejecutar operaciones de compra/venta, gestionar sus saldos y ver su historial de transacciones. \
@@ -18,82 +20,96 @@ https://dolar-mep-app-for-latin-securities.vercel.app/
 - **Vender USD**: Calcular y ejecutar la venta de USD para obtener ARS.
 - **Historial de Transacciones**: Ver un historial de todas las transacciones de compra y venta.
 - **Gestión de Saldos**: Rastrear y actualizar los saldos en ARS y USD.
+- **Cotización en vivo del bono AL30**: Las cotizaciones de compra/venta se calculan a partir de una cotización en vivo del bono AL30 obtenida en cada visita.
+- **Selector de idioma EN/ES**: Cambia toda la interfaz entre inglés y español.
 
-## Componentes
+## Rutas y Componentes
 
-### `App`
+La aplicación está construida sobre el App Router de Next.js, por lo que cada pantalla es una ruta real en vez de un cambio de estado del lado del cliente dentro de una sola página.
 
-El punto de entrada principal de la aplicación. Configura el proveedor de Redux y renderiza los componentes `ChooseAmounts`, `MainCard`, `BuyCard` y `Sellcard`.
+### `/` — `app/page.tsx`
 
-### `ChooseAmounts`
+Ruta de entrada. Renderiza `ChooseAmounts` (`app/chooseAmounts.tsx`), que permite a los usuarios ingresar montos de saldos iniciales en ARS y USD para una simulación más cercana a su propia realidad, o continuar con los saldos predeterminados de la aplicación. Los campos incluyen validación (deben ser mayores a 0 y menores o iguales a 100.000.000). Si ya se realizaron una o más transacciones, esta pantalla también muestra un botón para borrar el Historial de Transacciones.
 
-Permite a los usuarios ingresar montos de saldos iniciales en ARS y USD, para realizar una simulación precisa de valores cercanos a la realidad del cliente, o continuar utilizando los saldos predeterminados de la aplicación, si es que el cliente decide probar la funcionalidad de la misma sin detenerse a llenar los campos iniciales. Estos últimos incluyen validación de entrada y manejo de errores para saldos menores o iguales a 0. Además, si se han realizado una o más transacciones, esta pantalla incluye un botón de borrado del Historial de Transacciones.
+### `/mainCard` — `app/mainCard/page.tsx`
 
-### `MainCard`
+Pantalla principal. Muestra los saldos actuales en ARS/USD y los botones para ir al flujo de compra o venta, cada uno acompañado de la cotización de compra/venta en vivo. Una vez que existe una o más transacciones, renderiza `TxsHistoryTable` (`app/mainCard/TxsHistoryTable.tsx`) debajo, mostrando más columnas en desktop que en mobile.
 
-El componente principal que proporciona la interfaz para comprar y vender USD. Muestra saldos iniciales en ARS y en USD y los botones para elegir la acción acompañados de la cotización de compra/venta actual. Cuando se han realizado una o más transacciones, este componente incluye la tabla del Historial de Transacciones debajo del componente principal.
+### `/mainCard/buy` — `app/mainCard/buy/page.tsx`
 
-### `BuyCard`
+Permite ingresar el monto en ARS a utilizar para comprar USD (o usar "Comprar todo mi disponible" para calcular el máximo automáticamente), con validación y manejo de errores. Al calcular, renderiza `BuyCalculationResult` (`app/mainCard/buy/BuyCalculationResult.tsx`), que muestra la cotización de compra, el ticker del bono, la cantidad de títulos, el monto a debitar en ARS y el USD final acreditado, y gestiona los modales de confirmación y éxito de la operación.
 
-Proporciona la interfaz para ingresar el monto de ARS a utilizar para comprar USD. Incluye validación de entrada con manejo de errores para saldos menores o iguales a 0 y botón de "Comprar todo mi disponible" para hacer el cálculo automático de cuántos títulos se alcanzan a comprar con el saldo actual en ARS.
+### `/mainCard/sell` — `app/mainCard/sell/page.tsx`
 
-### `SellCard`
-
-Proporciona la interfaz para ingresar el monto de USD a vender para obtener ARS. Incluye validación de entrada con manejo de errores para saldos menores o iguales a 0 y botón de "Vender todo mi disponible" para hacer el cálculo automático de cuántos títulos se alcanzan a vender con el saldo actual en USD.
-
-### `BuyCalculationResult`
-
-Maneja el cálculo y la visualización de los resultados para las transacciones de compra. Muestra el monto a comprar, la cotización actual de compra, el nombre del bono, la cant. de títulos a comprar, el monto a acreditar en ARS y el monto de la compra final en USD. También gestiona los modales de confirmación y éxito para las operaciones de compra.
-
-### `SellCalculationResult`
-
-Maneja el cálculo y la visualización de los resultados para las transacciones de venta. Muestra el monto a vender, la cotización actual de venta, el nombre del bono, la cant. de títulos a vender, el monto a debitar en USD y el monto de la compra final en ARS. También gestiona los modales de confirmación y éxito para las operaciones de venta.
-
-### `TxsHistoryTable`
-
-Muestra una tabla con todas las transacciones pasadas, incluyendo detalles diferentes para dispositivos desktop y mobile. Para el primer caso se muestran la fecha, el tipo de transacción, el saldo previo (en ARS para compras, en USD para ventas), el monto comprado/vendido, el saldo posterior (en ARS para compras, en USD para ventas) y la cotización utilizada para la transacción. Para dispositivos móviles se acotaron los datos a la fecha, el monto comprado/vendido y la cotización utilizada. Esta tabla puede borrarse en la pantalla previa de `ChooseAmounts` por si quieren "resetearse" los registros anteriores a una nueva selección de montos.
+El equivalente del lado de venta: ingresar (o autocompletar) el monto en USD a vender, y luego `SellCalculationResult` (`app/mainCard/sell/SellCalculationResult.tsx`) muestra la cotización de venta y gestiona los modales de confirmación y éxito.
 
 ## Gestión de Estado
 
-La aplicación utiliza Redux para la gestión del estado. El slice principal del estado es `userDataSlice`, que incluye acciones para cambiar saldos, cambiar modos (que a su vez cambia la pantalla que se renderiza al cliente) y agregar registros de transacciones.
+Redux (mediante Redux Toolkit) gestiona los saldos, el historial de transacciones y el idioma seleccionado. El store (`lib/store.ts`) y su único slice, `userDataSlice` (`lib/userDataSlice.ts`), se proveen una única vez en el layout raíz (`app/layout.tsx`) a través de `lib/CustomReduxProvider.tsx`, de modo que todas las rutas comparten el mismo estado. La cotización del bono AL30 se obtiene por separado con un pequeño hook basado en SWR (`features/getAL30Data.ts`), en lugar de mediante Redux, ya que se trata de datos remotos y cacheables en vez de estado propio del usuario.
 
 ## Pruebas
 
-La aplicación incluye pruebas unitarias para todos los componentes principales utilizando Jest y React Testing Library. Esta primera versión de las pruebas cubre sólo la correcta renderización, cambios en las entradas, manejo de errores y despacho de acciones básicas.
+La aplicación cuenta con tests unitarios/de integración para cada pantalla y componente de cálculo utilizando Jest y React Testing Library (`npm test`, 46 tests en 7 suites). Cubren renderizado, validación de inputs, navegación, estados de error y el flujo de confirmación de compra/venta, con un store de Redux nuevo y precargado en cada test.
+
+## Scripts
+
+| Script | Qué hace |
+| --- | --- |
+| `npm run dev` | Inicia el servidor de desarrollo local (Turbopack) |
+| `npm run build` | Build de producción |
+| `npm start` | Compila e inicia el servidor de producción |
+| `npm run lint` | ESLint mediante `next lint` |
+| `npm run typecheck` | Chequeo de TypeScript sin emitir archivos |
+| `npm test` | Ejecuta la suite de tests de Jest |
+| `npm run verify` | Ejecuta lint, typecheck y tests juntos |
 
 ## Instalación
 
 Para instalar y ejecutar la aplicación localmente, siga estos pasos:
 
 1. Clone el repositorio:
-    
-	```
-	git clone https://github.com/luchob89/dolar-MEP-App-for-Latin-Securities
-	```
-	
+
+    ```
+    git clone https://github.com/luchob89/dolar-MEP-App-for-Latin-Securities
+    ```
+
 2. Navegue al directorio del proyecto:
 
     ```
-	cd dolar-MEP-App-for-Latin-Securities
-	```
-	
+    cd dolar-MEP-App-for-Latin-Securities
+    ```
+
 3. Instale las dependencias:
-    
-	```
-	npm install
-	```
-	
-4. Construya e inicie una versión productiva:
-    
-	```
-	npm start
-	```
-	
+
+    ```
+    npm install
+    ```
+
+4. Ejecútela localmente en modo desarrollo:
+
+    ```
+    npm run dev
+    ```
+
+   O bien, construya e inicie una versión productiva:
+
+    ```
+    npm start
+    ```
+
+### Ejecutar con Docker
+
+Se incluye un `Dockerfile` (build multi-stage, con el output standalone de Next.js):
+
+```
+docker build -t dolar-mep-app .
+docker run -p 3000:3000 dolar-mep-app
+```
+
 ## Uso
 
 1. Abra la aplicación en su navegador.
 2. Ingrese un saldo en ARS, que usará para comprar USD, y un saldo en USD, que usará para obtener ARS. También puede continuar con los saldos predeterminados por la aplicación.
 3. Haga clic en el botón "Comprar USD" para comprar USD o en el botón "Vender USD" para vender USD.
 4. Confirme la transacción en el modal que aparece.
-5. Visualize los saldos actualizados y el historial de transacciones.
-
+5. Visualice los saldos actualizados y el historial de transacciones.
