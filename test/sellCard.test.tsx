@@ -1,46 +1,44 @@
 import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
-import SellCard from '../app/mainCard/sellCard';
-import { AL30Data } from '../app/page';
-import { Provider } from 'react-redux';
-import { store } from '../app/store';
-import { describe, it, expect, jest } from '@jest/globals';
+import { fireEvent, screen } from '@testing-library/react';
+import SellCard from '../app/mainCard/sell/page';
+import { AL30DataType } from '@/features/getAL30Data';
+import { describe, it, expect, beforeEach } from '@jest/globals';
 import '@testing-library/jest-dom';
-import { ES } from '@/lang/ES';
+import { renderWithStore } from './testUtils';
+
+const mockPush = jest.fn();
+jest.mock('next/navigation', () => ({
+    useRouter: () => ({ push: mockPush }),
+}));
+
+const mockAL30Data: AL30DataType = {
+    ticker: 'AL30',
+    ars_bid: 79770,
+    ars_ask: 79790,
+    usd_bid: 68.23,
+    usd_ask: 68.25,
+};
+
+jest.mock('@/features/getAL30Data', () => ({
+    useAL30Data: () => ({ AL30Data: mockAL30Data, error: undefined, isLoading: false }),
+}));
 
 describe('SellCard Component', () => {
-    const mockAL30Data: AL30Data = {
-        ticker: 'AL30',
-        ars_bid: 79770,
-        ars_ask: 79790,
-        usd_bid: 68.23,
-        usd_ask: 68.25,
-    };
 
-    const defaultProps = {
-        AL30Data: mockAL30Data,
-        balanceARS: 10000,
-        balanceUSD: 100,
-        dispatch: jest.fn(),
-        selectedLangObject: ES
-    };
+    const balances = { balanceARS: 10000, balanceUSD: 100 };
+
+    beforeEach(() => {
+        mockPush.mockClear();
+    });
 
     it('should render without crashing', () => {
-        render(
-            <Provider store={store}>
-                <SellCard {...defaultProps} />
-            </Provider>
-        );
+        renderWithStore(<SellCard />, balances);
 
         expect(screen.getByText('Venta de Dólar MEP')).toBeInTheDocument();
     });
 
     it('should update amount on input change', () => {
-        render(
-            <Provider store={store}>
-                <SellCard {...defaultProps} />
-            </Provider>
-        );
+        renderWithStore(<SellCard />, balances);
 
         const input = screen.getByPlaceholderText('Seleccione monto en USD');
         fireEvent.change(input, { target: { value: '50' } });
@@ -49,11 +47,7 @@ describe('SellCard Component', () => {
     });
 
     it('should show error message if input is empty', () => {
-        render(
-            <Provider store={store}>
-                <SellCard {...defaultProps} />
-            </Provider>
-        );
+        renderWithStore(<SellCard />, balances);
 
         const input = screen.getByPlaceholderText('Seleccione monto en USD');
         fireEvent.change(input, { target: { value: '' } });
@@ -63,11 +57,7 @@ describe('SellCard Component', () => {
     });
 
     it('should show error message if amount is negative', () => {
-        render(
-            <Provider store={store}>
-                <SellCard {...defaultProps} />
-            </Provider>
-        );
+        renderWithStore(<SellCard />, balances);
 
         const input = screen.getByPlaceholderText('Seleccione monto en USD');
         fireEvent.change(input, { target: { value: '-200' } });
@@ -77,11 +67,7 @@ describe('SellCard Component', () => {
     });
 
     it('should show error message if amount is greater than 100.000.000', () => {
-        render(
-            <Provider store={store}>
-                <SellCard {...defaultProps} />
-            </Provider>
-        );
+        renderWithStore(<SellCard />, balances);
 
         const input = screen.getByPlaceholderText('Seleccione monto en USD');
         fireEvent.change(input, { target: { value: '10000000000000' } });
@@ -91,13 +77,7 @@ describe('SellCard Component', () => {
     });
 
     it('should show more data and Sell button on Calculate button click', () => {
-        const dispatchMock = jest.fn();
-        const props = { ...defaultProps, dispatch: dispatchMock };
-        render(
-            <Provider store={store}>
-                <SellCard {...props} />
-            </Provider>
-        );
+        renderWithStore(<SellCard />, balances);
 
         const input = screen.getByPlaceholderText('Seleccione monto en USD');
         fireEvent.change(input, { target: { value: '50' } });
@@ -106,19 +86,21 @@ describe('SellCard Component', () => {
         expect(screen.getByText('Vender')).toBeInTheDocument();
     });
 
-    it('should show more data, total amount in ARS to be deducted and Buy button on "Buy All available amount" button click ', () => {
-    
-            const props = { ...defaultProps };
-            render(
-                <Provider store={store}>
-                    <SellCard {...props} />
-                </Provider>
-            );
-    
-            fireEvent.click(screen.getByText('Vender todo mi disponible'));
-            const nominals = Math.floor(defaultProps.balanceUSD / (mockAL30Data.usd_ask/100));
-    
-            expect(screen.getByText( nominals )).toBeInTheDocument();
-            expect(screen.getByText('Vender')).toBeInTheDocument();
+    it('should show more data, total amount and Sell button on "Sell All available amount" button click ', () => {
+        renderWithStore(<SellCard />, balances);
+
+        fireEvent.click(screen.getByText('Vender todo mi disponible'));
+        const nominals = Math.floor(balances.balanceUSD / (mockAL30Data.usd_ask / 100));
+
+        expect(screen.getByText(new Intl.NumberFormat("de-DE").format(nominals))).toBeInTheDocument();
+        expect(screen.getByText('Vender')).toBeInTheDocument();
+    });
+
+    it('should navigate back to /mainCard when Volver is clicked', () => {
+        renderWithStore(<SellCard />, balances);
+
+        fireEvent.click(screen.getByText('Volver'));
+
+        expect(mockPush).toHaveBeenCalledWith('/mainCard');
     });
 });

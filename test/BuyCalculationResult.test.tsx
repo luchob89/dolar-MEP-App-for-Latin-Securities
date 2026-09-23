@@ -1,15 +1,19 @@
 import React from 'react';
-import { render, fireEvent, waitFor, screen } from '@testing-library/react';
-import { BuyCalculationResult } from '../app/mainCard/BuyCalculationResult';
-import { AL30Data } from '../app/page';
-import { Provider } from 'react-redux';
-import { store } from '../app/store';
-import { describe, it, expect, jest } from '@jest/globals';
+import { fireEvent, waitFor, screen } from '@testing-library/react';
+import { BuyCalculationResult } from '../app/mainCard/buy/BuyCalculationResult';
+import { AL30DataType } from '@/features/getAL30Data';
+import { describe, it, expect, beforeEach } from '@jest/globals';
 import '@testing-library/jest-dom';
 import { ES } from '@/lang/ES';
+import { renderWithStore } from './testUtils';
+
+const mockPush = jest.fn();
+jest.mock('next/navigation', () => ({
+    useRouter: () => ({ push: mockPush }),
+}));
 
 describe('BuyCalculationResult Component', () => {
-    const mockAL30Data: AL30Data = {
+    const mockAL30Data: AL30DataType = {
         ticker: 'AL30',
         ars_bid: 79770,
         ars_ask: 79790,
@@ -29,44 +33,32 @@ describe('BuyCalculationResult Component', () => {
         selectedLangObject: ES
     };
 
+    beforeEach(() => {
+        mockPush.mockClear();
+    });
+
     it('should render without crashing', () => {
-        render(
-            <Provider store={store}>
-                <BuyCalculationResult {...defaultProps} />
-            </Provider>
-        );
+        renderWithStore(<BuyCalculationResult {...defaultProps} />);
 
         expect(screen.getByText('Monto a comprar:')).toBeInTheDocument();
     });
 
     it('should show error message if balance is insufficient', () => {
         const props = { ...defaultProps, balanceARS: 50 };
-        render(
-            <Provider store={store}>
-                <BuyCalculationResult {...props} />
-            </Provider>
-        );
+        renderWithStore(<BuyCalculationResult {...props} />);
 
         expect(screen.getByText('Saldo insuficiente. Por favor, elija un monto menor.')).toBeInTheDocument();
     });
 
     it('should open confirmation modal on buy button click', () => {
-        render(
-            <Provider store={store}>
-                <BuyCalculationResult {...defaultProps} />
-            </Provider>
-        );
+        renderWithStore(<BuyCalculationResult {...defaultProps} />);
 
         fireEvent.click(screen.getByText('Comprar'));
         expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
 
     it('should show success modal after confirming purchase', async () => {
-        render(
-            <Provider store={store}>
-                <BuyCalculationResult {...defaultProps} />
-            </Provider>
-        );
+        renderWithStore(<BuyCalculationResult {...defaultProps} />);
 
         fireEvent.click(screen.getByText('Comprar'));
         fireEvent.click(screen.getByText('Aceptar'));

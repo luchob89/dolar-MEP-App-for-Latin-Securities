@@ -69,20 +69,18 @@ export default function BuyCard() {
           .btn-custom1 {
             background-color: #000039;
             color: white;
-
-            &:hover {
-              background-color: #000029;
-              color: white;
-              }
+          }
+          .btn-custom1:hover {
+            background-color: #000029;
+            color: white;
           }
           .btn-custom2 {
             background-color: rgb(51, 151, 244);
             color: white;
-
-            &:hover {
-              background-color: rgb(51, 121, 800);
-              color: white;
-              }
+          }
+          .btn-custom2:hover {
+            background-color: rgb(51, 121, 800);
+            color: white;
           }
       `}
       </style>
