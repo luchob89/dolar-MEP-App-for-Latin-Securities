@@ -1,5 +1,6 @@
 # Aplicación de compra/venta de Dólar MEP para Latin Securities
 
+[![CI](https://github.com/luchob89/dolar-MEP-App-for-Latin-Securities/actions/workflows/ci.yml/badge.svg)](https://github.com/luchob89/dolar-MEP-App-for-Latin-Securities/actions/workflows/ci.yml)
 [![en](https://img.shields.io/badge/lang-en-blue.svg)](https://github.com/luchob89/dolar-MEP-App-for-Latin-Securities/blob/main/README.md)
 
 ## Descripción General
@@ -50,6 +51,8 @@ Redux (mediante Redux Toolkit) gestiona los saldos, el historial de transaccione
 ## Pruebas
 
 La aplicación cuenta con tests unitarios/de integración para cada pantalla y componente de cálculo utilizando Jest y React Testing Library (`npm test`, 46 tests en 7 suites). Cubren renderizado, validación de inputs, navegación, estados de error y el flujo de confirmación de compra/venta, con un store de Redux nuevo y precargado en cada test.
+
+Un [workflow de GitHub Actions](.github/workflows/ci.yml) ejecuta lint, typecheck, tests y el build en cada push y pull request a `main`.
 
 ## Scripts
 
